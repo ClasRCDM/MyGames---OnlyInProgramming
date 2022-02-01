@@ -16,7 +16,8 @@ def grid(janela, comprimento, tamanho_linha, tamanho_quadrado):
         draw_grid(x_c)
 
 
-def borda(janela, comprimento, tamanho, cor=(0, 0, 0), espaçamento=0, p_borda=12):
+def borda(janela, comprimento, tamanho,
+          cor=(0, 0, 0), espaçamento=0, p_borda=12):
     def borda_vertical(lado='esquerdo'):
         for y in arange(comprimento // tamanho):
             draw.line(janela, cor,
