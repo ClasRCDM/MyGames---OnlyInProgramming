@@ -54,4 +54,18 @@ class Mundo:
 
     def menu(init, janela):
         defs.borda(janela, TELA_CHEIA[0], 30, (80, 80, 80), 0, 20)
-        texto.Texto(janela, 'teste', 50, (255, 255, 255))
+
+        # Title
+        título = texto.Texto(janela, 'Snake_Pygame', 30, (255, 255, 255),
+                             x=TELA_CHEIA[0] / 2,
+                             y=TELA_CHEIA[1] / 2 - 100)
+        título.sublinhado(posição='cima', caractere='*')
+        # Play game
+        b_jogar = texto.Texto(janela, 'Jogar', 40, (255, 255, 255),
+                              x=TELA_CHEIA[0] / 2,
+                              y=TELA_CHEIA[1] / 2 + 50)
+        b_jogar.sublinhado(posição='cima_baixo')
+        # Exit
+        texto.Texto(janela, 'Sair', 35, (255, 255, 255),
+                    x=TELA_CHEIA[0] / 2,
+                    y=TELA_CHEIA[1] / 2 + 150).sublinhado(posição='cima_baixo')
