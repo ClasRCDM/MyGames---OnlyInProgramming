@@ -54,4 +54,4 @@ class Mundo:
 
     def menu(init, janela):
         defs.borda(janela, TELA_CHEIA[0], 30, (80, 80, 80), 0, 20)
-        texto.Texto(janela, 'a', 'teste', 50, (255, 255, 255), pixel=True)
+        texto.Texto(janela, 'teste', 50, (255, 255, 255))
