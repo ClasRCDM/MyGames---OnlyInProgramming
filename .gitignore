@@ -1,3 +1,5 @@
 venv
 testes/__pycache__
 Snake_Python/__pycache__
+Snake_Python/módulos/defs/__pycache__
+Snake_Python/módulos/texto/__pycache__

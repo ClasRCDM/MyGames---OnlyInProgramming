@@ -1,7 +1,6 @@
 #####################################
 # /absolute variables of the world\ #
-TELA_CHEIA = 600, 600
-FPS = 60
+TELA_CHEIA = 680, 680
 
 # \absolute variables of the world/ #
 #####################################
