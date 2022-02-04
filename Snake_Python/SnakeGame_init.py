@@ -6,4 +6,5 @@ from SnakeGame import Mundo
 if __name__ == '__main__':
     Snake = Mundo()
     Snake.variáveis_inicias()
+    Snake.set_cena('MENU')
     Snake.iniciando()

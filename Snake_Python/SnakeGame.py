@@ -66,6 +66,7 @@ class Mundo:
 
         #################
         # /Itens World\ #
+        self.cena: str = 'None'
 
         # $ Texts $ #
         self.Textos: dict = {}
@@ -74,15 +75,24 @@ class Mundo:
         #################
 
     def iniciando(self):
-        self.menu_estatico(self.janela)
+        if self.cena.lower() == 'menu': self.menu()
+        elif self.cena.lower() == 'jogar': self.jogar()
         self.processando()
+
+    def set_cena(cc, cena: str = None):
+        if cena is None: cc.cena = 'menu'
+        else: cc.cena = cena.lower()
 
     def processando(pcs):
         while 1:
             pcs.mouse_pos = pygame.mouse.get_pos()
 
             pcs.principais_eventos()
-            pcs.menu_com_input(pcs.janela)
+            if pcs.cena.lower() == 'menu':
+                pcs.menu_com_input(pcs.janela)
+            elif pcs.cena.lower() == 'jogar':
+                pcs.janela.fill((0, 0, 0))
+                pcs.Textos.clear()
 
             if not pcs.ativo_m: break
 
@@ -121,6 +131,12 @@ class Mundo:
     def menu_com_input(update, janela):
         if update.clicando:  # Starting game or Leaving &
             if update.Textos['b_jogar'].mouse_colisão(update.mouse_pos):
-                print('jogar')
+                update.cena = 'Jogar'
             elif update.Textos['b_sair'].mouse_colisão(update.mouse_pos):
-                print('sair')
+                update.ativo_m = False
+
+    def menu(action):
+        action.menu_estatico(action.janela)
+
+    def jogar(self):
+        pass
