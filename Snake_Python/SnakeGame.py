@@ -1,9 +1,10 @@
 # & /Imports World\ & #
 import pygame
+import variáveis as v
 
-from variáveis import *
 from módulos import defs
-from módulos import texto
+from módulos import text as texto
+from módulos import player as cobra
 # & \Imports World/ & #
 
 
@@ -17,7 +18,7 @@ class Mundo:
     pygame.display.set_caption('Mundo...')
 
     # Basic utilities &
-    janela = pygame.display.set_mode((TELA_CHEIA), depth=32, display=1)
+    janela = pygame.display.set_mode((v.TELA_CHEIA), depth=32, display=1)
     fps = pygame.time.Clock()
 
     # World variables &
@@ -25,6 +26,9 @@ class Mundo:
     ativo_m = None
     mouse_pos = None
     clicando = None
+
+    # Entities &
+    Entidades: dict = {}
 
     # &#########################& #
     @classmethod
@@ -38,14 +42,10 @@ class Mundo:
             cls.mouse_pos = pygame.mouse.get_pos()
 
     @classmethod
-    def principais_eventos(cls):
-        for evento in pygame.event.get():
-            # Exit to game &
-            cls.ativo_m = cls.fechando_janela(evento)
-            cls.clicando = cls.checando_click(evento)
-
-        pygame.display.flip()
-        cls.fps.tick(cls.FPS)
+    def principais_eventos(cls, eventos):
+        # Exit to game &
+        cls.ativo_m = cls.fechando_janela(eventos)
+        cls.clicando = cls.checando_click(eventos)
 
     @classmethod
     def checando_click(cls, evento):  # @ Checking the click @ #
@@ -87,23 +87,35 @@ class Mundo:
         while 1:
             pcs.mouse_pos = pygame.mouse.get_pos()
 
-            pcs.principais_eventos()
             if pcs.cena.lower() == 'menu':
                 pcs.menu_com_input(pcs.janela)
             elif pcs.cena.lower() == 'jogar':
                 pcs.janela.fill((0, 0, 0))
                 pcs.Textos.clear()
 
-            if not pcs.ativo_m: break
+                pcs.Entidades['cobra'].update(pcs.janela)
+                pcs.Entidades['cobra'].direção()
+
+            for eventos in pygame.event.get():
+                pcs.principais_eventos(eventos)
+
+                pcs.Entidades['cobra'].movendo(
+                    eventos) if pcs.cena.lower() == 'jogar' else None
+
+            if not pcs.ativo_m:
+                break
+
+            pygame.display.flip()
+            pcs.fps.tick(pcs.FPS)
 
     def menu_estatico(init, janela):
-        defs.borda(janela, TELA_CHEIA[0], 30, (80, 80, 80), 0, 20)
+        defs.borda(janela, v.TELA_CHEIA[0], 30, (80, 80, 80), 0, 20)
 
         # % Title %
         título = texto.Texto(janela, 'Snake_Pygame', 30,
                              cor=(255, 255, 255),
-                             x=TELA_CHEIA[0] / 2,
-                             y=TELA_CHEIA[1] / 2 - 100)
+                             x=v.TELA_CHEIA[0] / 2,
+                             y=v.TELA_CHEIA[1] / 2 - 100)
         título.sublinhado(posição='cima', caractere='*')
 
         # % Play game %
@@ -111,8 +123,8 @@ class Mundo:
                               rect=True,
                               cor=(255, 255, 255),
                               cor_fundo=(10, 10, 10),
-                              x=TELA_CHEIA[0] / 2,
-                              y=TELA_CHEIA[1] / 2 + 50)
+                              x=v.TELA_CHEIA[0] / 2,
+                              y=v.TELA_CHEIA[1] / 2 + 50)
         b_jogar.sublinhado(posição='cima_baixo')
 
         # % Exit %
@@ -120,8 +132,8 @@ class Mundo:
                              rect=True,
                              cor=(255, 255, 255),
                              cor_fundo=(10, 10, 10),
-                             x=TELA_CHEIA[0] / 2,
-                             y=TELA_CHEIA[1] / 2 + 150)
+                             x=v.TELA_CHEIA[0] / 2,
+                             y=v.TELA_CHEIA[1] / 2 + 150)
         b_sair.sublinhado(posição='cima_baixo')
 
         # * Results *
@@ -131,7 +143,8 @@ class Mundo:
     def menu_com_input(update, janela):
         if update.clicando:  # Starting game or Leaving &
             if update.Textos['b_jogar'].mouse_colisão(update.mouse_pos):
-                update.cena = 'Jogar'
+                update.set_cena('Jogar')
+                update.iniciando()
             elif update.Textos['b_sair'].mouse_colisão(update.mouse_pos):
                 update.ativo_m = False
 
@@ -139,4 +152,5 @@ class Mundo:
         action.menu_estatico(action.janela)
 
     def jogar(self):
-        pass
+        pygame.display.set_caption('Snake_game')
+        self.Entidades['cobra'] = cobra.Snake()
