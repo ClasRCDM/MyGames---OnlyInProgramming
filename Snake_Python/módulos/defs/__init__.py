@@ -2,12 +2,14 @@ from pygame import draw
 from numpy import arange
 
 
-def grid(janela, comprimento, tamanho_linha, tamanho_quadrado):
+def grid(janela, comprimento,
+         tamanho_linha, tamanho_quadrado,
+         cor: tuple = (0, 0, 0)):
     def draw_grid(v):
-        draw.line(janela, (255, 255, 255),
+        draw.line(janela, cor,
                   (v * tamanho_quadrado, 0),
                   (v * tamanho_quadrado, comprimento))
-        draw.line(janela, (255, 255, 255),
+        draw.line(janela, cor,
                   (0, v * tamanho_quadrado),
                   (comprimento, v * tamanho_quadrado))
 

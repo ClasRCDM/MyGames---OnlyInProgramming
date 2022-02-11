@@ -1,50 +1,95 @@
 # & /Imports Player\ & #
-from variáveis import snake, SNAKE_COR, MINHAS_DIREÇÕES, minha_direção
+from variáveis import snake, TAMANHO_GRID
+from variáveis import SNAKE_COR, SNAKE_VELOCIDADE, SNAKE_TAMANHO
+from variáveis import MINHAS_DIREÇÕES, minha_direção
+from variáveis import maças, TELA_CHEIA
 
 from pygame import Surface
 from pygame import K_w, K_s, K_a, K_d
 from pygame import KEYDOWN
 
 from operator import sub, add
+
+from random import randrange
 # & \Imports Player/ & #
 
 
 # Player
 class Snake:
-    SNAKE_PELE = Surface((10, 10))
+    SNAKE_PELE = Surface(SNAKE_TAMANHO)
     SNAKE_PELE.fill(SNAKE_COR)
+    SNAKE_rect = SNAKE_PELE.get_rect(topleft=snake[0])
+
+    crescente_corpo = 2
 
     @classmethod
-    def update(cls, janela):
-        [janela.blit(cls.SNAKE_PELE, pos) for pos in snake]
+    def update(cls, janela, MAÇA_PELE):
+        cls.SNAKE_rect = [cls.SNAKE_PELE.get_rect(topleft=pos) for pos in snake]
+        [janela.blit(cls.SNAKE_PELE, rect) for rect in cls.SNAKE_rect]
+
+        if cls.verificando_movimento(0) and cls.verificando_movimento(1):
+            snake.append((snake[0][0], snake[0][1]))
+
+        if cls.SNAKE_rect[0].colliderect(MAÇA_PELE):
+            cls.crescente_corpo += 1
+            maças[0] = (randrange(0, TELA_CHEIA[0]) // TAMANHO_GRID*TAMANHO_GRID,
+                        randrange(0, TELA_CHEIA[1]) // TAMANHO_GRID*TAMANHO_GRID)
+        else: snake.pop(1) if len(snake) >= cls.crescente_corpo else None
+
+    @classmethod
+    def verificando_movimento(vr_v, pos, valor=None):
+        index = valor if valor is not None else '.0'
+        x_y = f'{snake[0][pos] / TAMANHO_GRID:.3f}'
+        if index in x_y:  # .025
+            return True
+        return False
 
     def __init__(self):
         print('Cobra colocada')
+        self.velocidade: int = SNAKE_VELOCIDADE
+        self.velocidade_constante: int = 10
+
+        self.proxima_direção_cb = None
+        self.proxima_direção_ed = None
 
     def direção(drc):
         def verificando_direção_cb(op, v, di):
-            if minha_direção == MINHAS_DIREÇÕES[di]:
-                snake[0] = snake[0][0], op(snake[0][1], v)
+            snake[0] = snake[0][0], op(snake[0][1], v) \
+                if minha_direção == MINHAS_DIREÇÕES[di] else snake[0][1]
 
         def verificando_direção_ed(op, v, di):
-            if minha_direção == MINHAS_DIREÇÕES[di]:
-                snake[0] = op(snake[0][0], v), snake[0][1]
+            snake[0] = op(snake[0][0], v) \
+                if minha_direção == MINHAS_DIREÇÕES[di] else snake[0][0], snake[0][1]
 
-        verificando_direção_cb(sub, 10, 'CIMA')
-        verificando_direção_cb(add, 10, 'BAIXO')
-        verificando_direção_ed(sub, 10, 'ESQUERDA')
-        verificando_direção_ed(add, 10, 'DIREITA')
+        verificando_direção_cb(sub, drc.velocidade, 'CIMA')
+        verificando_direção_cb(add, drc.velocidade, 'BAIXO')
+        verificando_direção_ed(sub, drc.velocidade, 'ESQUERDA')
+        verificando_direção_ed(add, drc.velocidade, 'DIREITA')
 
-        for i in range(len(snake) - 1, 0, -1):
-            snake[i] = (snake[i-1][0], snake[i-1][1])
+        if drc.proxima_direção_cb is not None or drc.proxima_direção_ed is not None:
+            global minha_direção
+            if drc.verificando_movimento(0):
+                minha_direção = drc.proxima_direção_cb \
+                    if drc.proxima_direção_cb is not None else minha_direção
+                drc.proxima_direção_cb = None
+            if drc.verificando_movimento(1):
+                minha_direção = drc.proxima_direção_ed \
+                    if drc.proxima_direção_ed is not None else minha_direção
+                drc.proxima_direção_ed = None
 
     def movendo(mv, evento):
-        def mover(tecla, p_direção):
+        def mover_cb(tecla, p_direção):
             if evento.type == KEYDOWN and evento.key == tecla:
-                global minha_direção
-                minha_direção = p_direção
+                mv.proxima_direção_cb = p_direção
 
-        mover(K_a, MINHAS_DIREÇÕES['ESQUERDA'])
-        mover(K_d, MINHAS_DIREÇÕES['DIREITA'])
-        mover(K_w, MINHAS_DIREÇÕES['CIMA'])
-        mover(K_s, MINHAS_DIREÇÕES['BAIXO'])
+        def mover_ed(tecla, p_direção):
+            if evento.type == KEYDOWN and evento.key == tecla:
+                mv.proxima_direção_ed = p_direção
+
+        mover_cb(K_w, MINHAS_DIREÇÕES['BAIXO'])
+        mover_cb(K_s, MINHAS_DIREÇÕES['CIMA'])
+        mover_ed(K_a, MINHAS_DIREÇÕES['DIREITA'])
+        mover_ed(K_d, MINHAS_DIREÇÕES['ESQUERDA'])
+
+    def set_velocidade(speed, velocidade):
+        speed.velocidade = velocidade * -speed.velocidade_constante
