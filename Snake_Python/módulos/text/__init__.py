@@ -1,8 +1,7 @@
 # () /Imports text\ () #
-from pygame import font, Rect, draw  # Text initialization
+from pygame import font, draw  # Text initialization
 from os import path, getcwd  # Get files
 from variáveis import ARQUIVO_FONT, NOME_FONT  # source location
-from numpy import arange
 # () \Imports text/ () #
 
 

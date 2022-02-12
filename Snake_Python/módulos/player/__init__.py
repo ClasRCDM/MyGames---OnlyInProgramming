@@ -1,15 +1,16 @@
 # & /Imports Player\ & #
+# ------ Player variables ------ #
 from variáveis import snake, TAMANHO_GRID
 from variáveis import SNAKE_COR, SNAKE_VELOCIDADE, SNAKE_TAMANHO
 from variáveis import MINHAS_DIREÇÕES, minha_direção
 from variáveis import maças, TELA_CHEIA
-
+# ------ Pygame defs ------ #
 from pygame import Surface
 from pygame import K_w, K_s, K_a, K_d
-from pygame import KEYDOWN
-
+from pygame import key
+# ------ Python operators ------ #
 from operator import sub, add
-
+# ------ Random number function ------ #
 from random import randrange
 # & \Imports Player/ & #
 
@@ -77,19 +78,18 @@ class Snake:
                     if drc.proxima_direção_ed is not None else minha_direção
                 drc.proxima_direção_ed = None
 
-    def movendo(mv, evento):
-        def mover_cb(tecla, p_direção):
-            if evento.type == KEYDOWN and evento.key == tecla:
-                mv.proxima_direção_cb = p_direção
+    def movendo(mv):
+        teclas = key.get_pressed()
 
-        def mover_ed(tecla, p_direção):
-            if evento.type == KEYDOWN and evento.key == tecla:
-                mv.proxima_direção_ed = p_direção
+        def mover(tecla, p_direção, opção):
+            if teclas[tecla]:
+                if opção == 0: mv.proxima_direção_cb = p_direção
+                elif opção == 1: mv.proxima_direção_ed = p_direção
 
-        mover_cb(K_w, MINHAS_DIREÇÕES['BAIXO'])
-        mover_cb(K_s, MINHAS_DIREÇÕES['CIMA'])
-        mover_ed(K_a, MINHAS_DIREÇÕES['DIREITA'])
-        mover_ed(K_d, MINHAS_DIREÇÕES['ESQUERDA'])
+        mover(K_w, MINHAS_DIREÇÕES['BAIXO'], 0)
+        mover(K_s, MINHAS_DIREÇÕES['CIMA'], 0)
+        mover(K_a, MINHAS_DIREÇÕES['DIREITA'], 1)
+        mover(K_d, MINHAS_DIREÇÕES['ESQUERDA'], 1)
 
     def set_velocidade(speed, velocidade):
         speed.velocidade = velocidade * -speed.velocidade_constante

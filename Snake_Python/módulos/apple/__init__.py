@@ -1,12 +1,11 @@
 # & /Imports Apple\ & #
+# ------ Apple variables ------ #
 from variáveis import maças
 from variáveis import MAÇA_COR, MAÇA_TAMANHO
 from variáveis import TELA_CHEIA
-
-from variáveis import snake
-
+# ------ Pygame defs ------ #
 from pygame import Surface
-
+# ------ Random number function ------ #
 from random import randrange
 # & \Imports Apple/ & #
 

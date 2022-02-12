@@ -1,10 +1,12 @@
 # & /Imports World\ & #
+# ------ General defs ------ #
 import pygame, time
+# ------ Game variables ------ #
 import variáveis as v
-
+# ------ Window modules ------ #
 from módulos import defs
 from módulos import text
-
+# ------ Entity modules ------ #
 from módulos import player
 from módulos import apple
 # & \Imports World/ & #
@@ -107,6 +109,7 @@ class Mundo:
                 pcs.Entidades['cobra'].update(pcs.janela,
                                               pcs.Entidades['maça'].volta())
                 pcs.Entidades['cobra'].direção()
+                pcs.Entidades['cobra'].movendo()
                 pcs.Entidades['cobra'].set_velocidade(v.SNAKE_VELOCIDADE * dt)
 
                 defs.grid(pcs.janela, v.TELA_CHEIA[0],
@@ -119,9 +122,6 @@ class Mundo:
 
             for eventos in pygame.event.get():
                 pcs.principais_eventos(eventos)
-
-                pcs.Entidades['cobra'].movendo(
-                    eventos) if pcs.cena.lower() == 'jogar' else None
 
                 if eventos.type == pygame.KEYDOWN and eventos.key == pygame.K_f:
                     apple.Maça.adicionando_maça()
