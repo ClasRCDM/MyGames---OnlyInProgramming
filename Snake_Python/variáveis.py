@@ -12,16 +12,16 @@ TAMANHO_GRID = 40
 # /global variables\ #
 
 # $ Variáveis do player $ #
-MINHAS_DIREÇÕES: dict = {'ESQUERDA': 0,
-                         'DIREITA': 1,
-                         'CIMA': 2,
-                         'BAIXO': 3}
+MINHAS_DIREÇÕES: dict = {'DIREITA': 0,
+                         'ESQUERDA': 1,
+                         'BAIXO': 2,
+                         'CIMA': 3}
 
 SNAKE_COR: tuple = (255, 255, 255)
 SNAKE_TAMANHO: tuple = (40, 40)
 SNAKE_VELOCIDADE: int = 20
 
-snake: list = [(400, 200)]
+snake: list = [(100, 200), (60, 200), (20, 200), (-20, 200)]
 
 minha_direção = MINHAS_DIREÇÕES['ESQUERDA']
 

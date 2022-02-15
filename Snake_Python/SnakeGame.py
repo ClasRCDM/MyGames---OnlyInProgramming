@@ -112,9 +112,9 @@ class Mundo:
                 pcs.Entidades['cobra'].movendo()
                 pcs.Entidades['cobra'].set_velocidade(v.SNAKE_VELOCIDADE * dt)
 
-                defs.grid(pcs.janela, v.TELA_CHEIA[0],
+                '''defs.grid(pcs.janela, v.TELA_CHEIA[0],
                           v.TAMANHO_GRID, v.TAMANHO_GRID,
-                          cor=(80, 80, 80))
+                          cor=(80, 80, 80))'''
 
                 text.Texto(pcs.janela, f'FPS: {pcs.fps.get_fps():.2f}',
                             15, cor=(239, 184, 16),
@@ -137,31 +137,41 @@ class Mundo:
 
         # % Title %
         título = text.Texto(janela, 'Snake_Pygame', 30,
-                             cor=(255, 255, 255),
-                             x=v.TELA_CHEIA[0] / 2,
-                             y=v.TELA_CHEIA[1] / 2 - 100)
+                            cor=(255, 255, 255),
+                            x=v.TELA_CHEIA[0] / 2,
+                            y=v.TELA_CHEIA[1] / 2 - 100)
         título.sublinhado(posição='cima', caractere='*')
 
         # % Play game %
         b_jogar = text.Texto(janela, 'Jogar', 40, 210, 50,
-                              rect=True,
-                              cor=(255, 255, 255),
-                              cor_fundo=(10, 10, 10),
-                              x=v.TELA_CHEIA[0] / 2,
-                              y=v.TELA_CHEIA[1] / 2 + 50)
-        b_jogar.sublinhado(posição='cima_baixo')
-
-        # % Exit %
-        b_sair = text.Texto(janela, 'Sair', 35, 150, 45,
                              rect=True,
                              cor=(255, 255, 255),
                              cor_fundo=(10, 10, 10),
                              x=v.TELA_CHEIA[0] / 2,
-                             y=v.TELA_CHEIA[1] / 2 + 150)
+                             y=v.TELA_CHEIA[1] / 2 + 50)
+        b_jogar.sublinhado(posição='cima_baixo')
+
+        # % Game options %
+        b_opções = text.Texto(janela, 'Opções', 40, 250, 50,
+                              rect=True,
+                              cor=(255, 255, 255),
+                              cor_fundo=(10, 10, 10),
+                              x=v.TELA_CHEIA[0] / 2,
+                              y=v.TELA_CHEIA[1] / 2 + 150)
+        b_opções.sublinhado(posição='cima_baixo')
+
+        # % Exit %
+        b_sair = text.Texto(janela, 'Sair', 35, 150, 50,
+                            rect=True,
+                            cor=(255, 255, 255),
+                            cor_fundo=(10, 10, 10),
+                            x=v.TELA_CHEIA[0] / 2,
+                            y=v.TELA_CHEIA[1] / 2 + 250)
         b_sair.sublinhado(posição='cima_baixo')
 
         # * Results *
         init.Textos['b_jogar'] = b_jogar
+        init.Textos['b_opções'] = b_opções
         init.Textos['b_sair'] = b_sair
 
     def menu_com_input(update, janela):
@@ -177,6 +187,8 @@ class Mundo:
 
     def jogar(self):
         pygame.display.set_caption('Snake_game')
+
+        self.Textos.clear()
 
         self.Entidades['cobra'] = player.Snake()
         self.Entidades['maça'] = apple.Maça()
