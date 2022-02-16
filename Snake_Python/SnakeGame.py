@@ -112,9 +112,9 @@ class Mundo:
                 pcs.Entidades['cobra'].movendo()
                 pcs.Entidades['cobra'].set_velocidade(v.SNAKE_VELOCIDADE * dt)
 
-                '''defs.grid(pcs.janela, v.TELA_CHEIA[0],
+                defs.grid(pcs.janela, v.TELA_CHEIA[0],
                           v.TAMANHO_GRID, v.TAMANHO_GRID,
-                          cor=(80, 80, 80))'''
+                          cor=(80, 80, 80))
 
                 text.Texto(pcs.janela, f'FPS: {pcs.fps.get_fps():.2f}',
                             15, cor=(239, 184, 16),

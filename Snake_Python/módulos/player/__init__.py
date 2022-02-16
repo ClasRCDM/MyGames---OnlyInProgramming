@@ -6,7 +6,7 @@ from variáveis import MINHAS_DIREÇÕES, minha_direção
 from variáveis import maças, TELA_CHEIA
 # ------ Pygame defs ------ #
 from pygame import Surface
-from pygame import K_w, K_s, K_a, K_d, K_c
+from pygame import K_w, K_s, K_a, K_d
 from pygame import key
 # ------ Python operators ------ #
 from operator import sub, add
@@ -49,15 +49,23 @@ class Snake:
 
         self.direção_snake_ed = 'DIREITA'
         self.direção_snake_cb = 'None'
+        self.teste = ['DIRETA' for _ in range(len(snake)+1)]
+        print(self.teste)
 
     def direção(drc):
         def verificando_direção_cb(op, v, di, parte):
             snake[parte] = snake[parte][0], op(snake[parte][1], v) \
                 if minha_direção == MINHAS_DIREÇÕES[di] else snake[parte][1]
+            x = str(int(snake[0][0]))[-1]
+            if x != 0 and minha_direção == MINHAS_DIREÇÕES[di]:
+                snake[parte] = snake[parte][0] - int(x), snake[parte][1]
 
         def verificando_direção_ed(op, v, di, parte):
             snake[parte] = op(snake[parte][0], v) \
                 if minha_direção == MINHAS_DIREÇÕES[di] else snake[parte][0], snake[parte][1]
+            y = str(int(snake[0][1]))[-1]
+            if y != 0 and minha_direção == MINHAS_DIREÇÕES[di]:
+                snake[parte] = snake[parte][0], snake[parte][1] - int(y)
 
         def movendo_corpo_cb(direção, op):
             def lado(pos, op):
@@ -71,6 +79,7 @@ class Snake:
                     lado('ESQUERDA', add)
                 else:
                     snake[p_corpo] = snake[p_corpo][0], op(snake[p_corpo][1], drc.velocidade)
+                    snake[p_corpo] = snake[0][0], snake[p_corpo][1] if snake[p_corpo] != snake[0] else None
 
         def movendo_corpo_ed(direção, op):
             def lado(pos, op):
@@ -84,6 +93,7 @@ class Snake:
                     lado('CIMA', add)
                 else:
                     snake[p_corpo] = op(snake[p_corpo][0], drc.velocidade), snake[p_corpo][1]
+                    snake[p_corpo] = snake[p_corpo][0], snake[0][1] if snake[p_corpo] != snake[0] else None
 
         verificando_direção_cb(sub, drc.velocidade, 'BAIXO', 0)
         verificando_direção_cb(add, drc.velocidade, 'CIMA', 0)
