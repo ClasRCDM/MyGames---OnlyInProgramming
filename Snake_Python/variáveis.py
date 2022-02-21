@@ -1,9 +1,10 @@
+"""Global constants file"""
 from random import randrange
 
 #####################################
 # /absolute variables of the world\ #
-TELA_CHEIA = 680, 680
-TAMANHO_GRID = 40
+TELA_CHEIA: tuple[int, int] = 680, 680
+TAMANHO_GRID: int = 20
 
 # \absolute variables of the world/ #
 #####################################
@@ -12,22 +13,20 @@ TAMANHO_GRID = 40
 # /global variables\ #
 
 # $ Variáveis do player $ #
-MINHAS_DIREÇÕES: dict = {'DIREITA': 0,
+MINHAS_DIREÇÕES: dict = {'CIMA': 0,
                          'ESQUERDA': 1,
                          'BAIXO': 2,
-                         'CIMA': 3}
+                         'DIREITA': 3}
 
-SNAKE_COR: tuple = (255, 255, 255)
-SNAKE_TAMANHO: tuple = (40, 40)
+SNAKE_COR: tuple[int, int, int] = (255, 255, 255)
+SNAKE_TAMANHO: tuple[int, int] = (20, 20)
 SNAKE_VELOCIDADE: int = 20
 
 snake: list = [(100, 200), (60, 200), (20, 200), (-20, 200)]
 
-minha_direção = MINHAS_DIREÇÕES['ESQUERDA']
-
 # $ Variáveis da maça $ #
-MAÇA_COR: tuple = (255, 17, 0)
-MAÇA_TAMANHO: tuple = (40, 40)
+MAÇA_COR: tuple[int, int, int] = (255, 17, 0)
+MAÇA_TAMANHO: tuple[int, int] = (20, 20)
 
 maças: list = [(randrange(0, TELA_CHEIA[0]) // 40*40,
                 randrange(0, TELA_CHEIA[1]) // 40*40)]

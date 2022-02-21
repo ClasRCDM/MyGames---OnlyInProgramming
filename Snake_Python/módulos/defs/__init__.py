@@ -1,3 +1,5 @@
+"""Independant functions file"""
+
 from pygame import draw
 from numpy import arange
 
@@ -14,8 +16,7 @@ def grid(janela, comprimento,
                   (comprimento, v * tamanho_quadrado))
 
     # Iniciando o grid
-    for x_c in arange(comprimento // tamanho_linha):
-        draw_grid(x_c)
+    [draw_grid(x_c) for x_c in arange(comprimento // tamanho_linha)]
 
 
 def borda(janela, comprimento, tamanho,

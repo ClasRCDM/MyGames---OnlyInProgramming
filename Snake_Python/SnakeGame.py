@@ -1,6 +1,9 @@
+"""Main program file"""
+
 # & /Imports World\ & #
 # ------ General defs ------ #
-import pygame, time
+import pygame
+from time import time
 # ------ Game variables ------ #
 import variáveis as v
 # ------ Window modules ------ #
@@ -17,14 +20,15 @@ from módulos import apple
 ########################
 
 class Mundo:
+    """Main program"""
     # Build game &
     pygame.init()
     pygame.display.set_caption('Mundo...')
 
     # Basic utilities &
-    janela = pygame.display.set_mode((v.TELA_CHEIA), depth=32, display=1)
+    janela = pygame.display.set_mode((v.TELA_CHEIA), depth=16, display=1)
     fps = pygame.time.Clock()
-    ultimo_tempo = time.time()
+    ultimo_tempo = time()
 
     # World variables &
     FPS: int = None
@@ -92,44 +96,26 @@ class Mundo:
 
     def processando(pcs):
         while 1:
-            dt = time.time() - pcs.ultimo_tempo
-            dt * pcs.FPS
-
-            pcs.ultimo_tempo = time.time()
             pcs.mouse_pos = pygame.mouse.get_pos()
 
             if pcs.cena.lower() == 'menu':
                 pcs.menu_com_input(pcs.janela)
             elif pcs.cena.lower() == 'jogar':
-                pcs.janela.fill((0, 0, 0))
-                pcs.Textos.clear()
-
-                pcs.Entidades['maça'].update(pcs.janela)
-
-                pcs.Entidades['cobra'].update(pcs.janela,
-                                              pcs.Entidades['maça'].volta())
-                pcs.Entidades['cobra'].direção()
-                pcs.Entidades['cobra'].movendo()
-                pcs.Entidades['cobra'].set_velocidade(v.SNAKE_VELOCIDADE * dt)
-
-                defs.grid(pcs.janela, v.TELA_CHEIA[0],
-                          v.TAMANHO_GRID, v.TAMANHO_GRID,
-                          cor=(80, 80, 80))
-
-                text.Texto(pcs.janela, f'FPS: {pcs.fps.get_fps():.2f}',
-                            15, cor=(239, 184, 16),
-                            x=100, y=70)
+                pcs.jogar_update()
 
             for eventos in pygame.event.get():
                 pcs.principais_eventos(eventos)
 
-                if eventos.type == pygame.KEYDOWN and eventos.key == pygame.K_f:
-                    apple.Maça.adicionando_maça()
+                if eventos.type == pygame.KEYDOWN and eventos.key == pygame.K_ESCAPE:
+                    pcs.ativo_m = False
+
+                if pcs.cena.lower() == 'jogar':
+                    pcs.Entidades['cobra'].input(eventos)
 
             if not pcs.ativo_m:
                 break
 
-            pygame.display.flip()
+            pygame.display.update()
             pcs.fps.tick(pcs.FPS)
 
     def menu_estatico(init, janela):
@@ -192,3 +178,19 @@ class Mundo:
 
         self.Entidades['cobra'] = player.Snake()
         self.Entidades['maça'] = apple.Maça()
+
+    def jogar_update(gp):
+        gp.janela.fill((0, 0, 0))
+
+        gp.Entidades['maça'].update(gp.janela)
+
+        gp.Entidades['cobra'].draw(gp.janela)
+        gp.Entidades['cobra'].update(gp.Entidades['maça'].volta())
+
+        defs.grid(gp.janela, v.TELA_CHEIA[0],
+                  v.TAMANHO_GRID, v.TAMANHO_GRID,
+                  cor=(80, 80, 80))
+
+        text.Texto(gp.janela, f'FPS: {gp.fps.get_fps():.2f}',
+                   15, cor=(239, 184, 16),
+                   x=100, y=70)
