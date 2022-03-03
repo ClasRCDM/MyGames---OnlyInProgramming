@@ -1,3 +1,5 @@
+"""Text class file"""
+
 # () /Imports text\ () #
 from pygame import font, draw  # Text initialization
 from os import path, getcwd  # Get files

@@ -3,7 +3,6 @@
 # & /Imports World\ & #
 # ------ General defs ------ #
 import pygame
-from time import time
 # ------ Game variables ------ #
 import variáveis as v
 # ------ Window modules ------ #
@@ -28,7 +27,6 @@ class Mundo:
     # Basic utilities &
     janela = pygame.display.set_mode((v.TELA_CHEIA), depth=16, display=1)
     fps = pygame.time.Clock()
-    ultimo_tempo = time()
 
     # World variables &
     FPS: int = None
@@ -137,27 +135,17 @@ class Mundo:
                              y=v.TELA_CHEIA[1] / 2 + 50)
         b_jogar.sublinhado(posição='cima_baixo')
 
-        # % Game options %
-        b_opções = text.Texto(janela, 'Opções', 40, 250, 50,
-                              rect=True,
-                              cor=(255, 255, 255),
-                              cor_fundo=(10, 10, 10),
-                              x=v.TELA_CHEIA[0] / 2,
-                              y=v.TELA_CHEIA[1] / 2 + 150)
-        b_opções.sublinhado(posição='cima_baixo')
-
         # % Exit %
         b_sair = text.Texto(janela, 'Sair', 35, 150, 50,
                             rect=True,
                             cor=(255, 255, 255),
                             cor_fundo=(10, 10, 10),
                             x=v.TELA_CHEIA[0] / 2,
-                            y=v.TELA_CHEIA[1] / 2 + 250)
+                            y=v.TELA_CHEIA[1] / 2 + 150)
         b_sair.sublinhado(posição='cima_baixo')
 
         # * Results *
         init.Textos['b_jogar'] = b_jogar
-        init.Textos['b_opções'] = b_opções
         init.Textos['b_sair'] = b_sair
 
     def menu_com_input(update, janela):
