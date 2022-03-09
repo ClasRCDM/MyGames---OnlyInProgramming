@@ -6,9 +6,12 @@ import arcade
 from typing import Optional
 from os import path, getcwd  # Get files
 # ------ Game variables ------ #
-import variáveis as v
+from variáveis import ARQUIVO
+from variáveis import W_LARGURA, W_ALTURA, W_TÍTULOS
+from variáveis import DEFAULT_DAMPING, W_GRAVIDADE
 # ------ Window modules ------ #
 from módulos.Pássaro import Bird
+from módulos.Parallax import Parallax
 # & \Imports World/ & #
 
 
@@ -21,7 +24,7 @@ class Jogo(arcade.Window):
     Main application class.
     """
 
-    diretorio: str = path.join(getcwd(), v.ARQUIVO)
+    diretorio: str = path.join(getcwd(), ARQUIVO)
 
     @classmethod
     def main(cls):
@@ -31,7 +34,7 @@ class Jogo(arcade.Window):
         arcade.run()
 
     def __init__(self):
-        super().__init__(v.W_LARGURA, v.W_ALTURA, v.W_TÍTULOS)
+        super().__init__(W_LARGURA, W_ALTURA, W_TÍTULOS)
 
         # Janela
         arcade.set_background_color(arcade.csscolor.BLACK)
@@ -39,6 +42,11 @@ class Jogo(arcade.Window):
 
         # Pássaro
         self.pássaro: Optional[arcade.Sprite] = None
+        self.pássaro_lista: Optional[arcade.SpriteList] = None
+
+        # Fundo
+        self.fundo = None
+        self.fundo_lista: Optional[arcade.SpriteList] = None
 
         # Physics engine
         self.physics_engine: Optional[arcade.PymunkPhysicsEngine] = None
@@ -46,18 +54,21 @@ class Jogo(arcade.Window):
     def setup(self):
         """Inicia o jogo. E caso seja chamado o reinicia."""
 
-        # Grupo do pássaro
+        # Grupo/Sprite do pássaro/Bird
         self.pássaro_lista = arcade.SpriteList()
-
-        # Bird/Pássaro
         self.pássaro = Bird(3.5, 6, self.diretorio)
 
-        # Adiciona o sprite do pássaro no grupo
+        # Grupo/Sprite do pássaro/Bird
+        self.fundo_lista = arcade.SpriteList()
+        self.fundo = Parallax(3.5, 6.2, self.diretorio)
+
+        # Adiciona os sprites nos grupos
         self.pássaro_lista.append(self.pássaro)
+        [self.fundo_lista.append(self.fundo._return(index)) for index in range(3)]
 
         # --- Pymunk Physics Engine Setup ---
-        damping = v.DEFAULT_DAMPING
-        gravity = (0, -v.W_GRAVIDADE)
+        damping = DEFAULT_DAMPING
+        gravity = (0, -W_GRAVIDADE)
 
         self.physics_engine = self.pássaro.created_física(damping, gravity)
         self.pássaro.set_física(self.physics_engine)
@@ -67,6 +78,7 @@ class Jogo(arcade.Window):
 
         self.clear()
 
+        self.fundo_lista.draw(pixelated=True)
         self.pássaro_lista.draw(pixelated=True)
 
     def on_update(self, delta_time):

@@ -1,5 +1,4 @@
 """Global constants file"""
-from arcade import csscolor
 
 # -----------------------------------#
 # /absolute variables of the world\ #
@@ -10,6 +9,7 @@ W_TÍTULOS: str = 'FlappyGame...'
 W_GRAVIDADE: int = 1500
 
 ARQUIVO: str = 'MyFlappyBird'
+ARQUIVO_BACKGROUND: str = 'texturas/background/background'
 # \absolute variables of the world/ #
 # -----------------------------------#
 
@@ -18,15 +18,23 @@ ARQUIVO: str = 'MyFlappyBird'
 
 # $ Variáveis do pássaro $ #
 # --- B = Bird/Pássaro --- #
-B_SPRITE_ISIZE = 13
+B_SPRITE_ISIZE: int = 13
 B_SPRITE_PSCALING = B_SPRITE_TSCALING = 4.0
-B_DAMPING = 0.4
-B_FRICTION = 1.0
-B_MASSA = 1.9
-B_JUMP_IMPULSE = 1800
-B_MAXH_SPEED = 450
-B_MAXV_SPEED = 1200
-B_MAXC_ROTAÇÃO, B_MAXB_ROTAÇÃO = -45, 55
+B_DAMPING: float = 0.4
+B_FRICTION: float = 1.0
+B_MASSA: float = 1.9
+B_JUMP_IMPULSE: int = 1800
+B_MAXH_SPEED: int = 450
+B_MAXV_SPEED: int = 1200
+B_MAXC_ROTAÇÃO, B_MAXB_ROTAÇÃO = -45, 45
+B_ANIMATION_SPEED: float = 0.35
+B_SET_ANGULO: int = 6
 B_SPRITE_SIZE = int(B_SPRITE_ISIZE * B_SPRITE_PSCALING)
 
-DEFAULT_DAMPING = 1.0
+DEFAULT_DAMPING: float = 1.0
+
+# $ Variáveis do pássaro $ #
+# --- F = Fundo/Background --- #
+F_SPRITE_ISIZE = 1
+F_SPRITE_PSCALING = F_SPRITE_TSCALING = 3.9
+F_SPRITE_SIZE = int(B_SPRITE_ISIZE * B_SPRITE_PSCALING)
