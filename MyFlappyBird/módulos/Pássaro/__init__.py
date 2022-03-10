@@ -4,6 +4,7 @@
 # ------ General defs ------ #
 import arcade
 from os import path
+from numpy import arange
 # ------ Game variables ------ #
 from variáveis import B_SPRITE_TSCALING, B_JUMP_IMPULSE
 from variáveis import B_SET_ANGULO, B_SPRITE_SIZE
@@ -27,11 +28,11 @@ class Bird(arcade.Sprite):
 
         # Conjunto de texturas/Carregando texturas
         self.voando_texturas = [arcade.load_texture_pair(
-            f"{main_path}_voando{texture}.png") for texture in range(8)]
+            f"{main_path}_voando{texture}.png") for texture in arange(8)]
         self.parado_texturas = [arcade.load_texture_pair(
-            f"{main_path}_voando{texture}.png") for texture in range(2)]
+            f"{main_path}_voando{texture}.png") for texture in arange(2)]
         self.ciscando_texturas = [arcade.load_texture_pair(
-            f"{main_path}_voando{texture}.png") for texture in range(3)]
+            f"{main_path}_voando{texture}.png") for texture in arange(3)]
 
         # Textura_Inicial
         self.texture = self.parado_texturas[0][0]

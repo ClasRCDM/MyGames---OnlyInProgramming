@@ -33,8 +33,12 @@ B_SPRITE_SIZE = int(B_SPRITE_ISIZE * B_SPRITE_PSCALING)
 
 DEFAULT_DAMPING: float = 1.0
 
-# $ Variáveis do pássaro $ #
+# $ Background variables $ #
 # --- F = Fundo/Background --- #
-F_SPRITE_ISIZE = 1
+F_SPRITE_ISIZE: int = 1
 F_SPRITE_PSCALING = F_SPRITE_TSCALING = 3.9
 F_SPRITE_SIZE = int(B_SPRITE_ISIZE * B_SPRITE_PSCALING)
+
+# --- P = Parallax --- #
+P_MAX_HORIZONTAL: int = 1100
+P_PONTO_DE_VOLTA: int = -1395

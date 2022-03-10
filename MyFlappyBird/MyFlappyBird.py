@@ -64,7 +64,8 @@ class Jogo(arcade.Window):
 
         # Adiciona os sprites nos grupos
         self.pássaro_lista.append(self.pássaro)
-        [self.fundo_lista.append(self.fundo._return(index)) for index in range(3)]
+        [self.fundo_lista.append(self.fundo._return(
+            index, self.fundo.layer_1)) for index in range(2)]
 
         # --- Pymunk Physics Engine Setup ---
         damping = DEFAULT_DAMPING
@@ -84,6 +85,8 @@ class Jogo(arcade.Window):
     def on_update(self, delta_time):
         """Movimentos e lógicas do jogo."""
         self.physics_engine.step()
+
+        self.fundo.update(self.fundo.layer_1)
 
     def on_key_press(self, chave, modifiers):
         """Chama sempre que uma tecla é pressionada."""
