@@ -4,7 +4,7 @@
 # ------ General defs ------ #
 from numpy import arange
 # ------ Game variables ------ #
-from variáveis import P_MAX_HORIZONTAL, P_PONTO_DE_VOLTA
+# -
 # ------ Window modules ------ #
 from módulos.Floresta import Background
 # & \Imports Parallax/ & #
@@ -13,17 +13,18 @@ from módulos.Floresta import Background
 class Parallax:
     """ Parallax class file """
 
-    MAX_X = P_MAX_HORIZONTAL
-    PONTO_X = P_PONTO_DE_VOLTA
+    def __init__(self, x, y,
+                 diretorio,
+                 index_image, image,
+                 max_x, ponto_max):
+        """ Init Parallax """
 
-    def __init__(self, x, y, diretorio):
-        self.layer_1 = Background((x, x-24), y, diretorio, 2)
-        self.layer_2 = Background((x, x-24), y, diretorio, 1)
-        self.layer_3 = Background((x, x-24), y, diretorio, 0)
+        self.MAX_X = max_x
+        self.PONTO_X = ponto_max
 
-        self.set_psize(self.layer_1)
-        self.set_psize(self.layer_2)
-        self.set_psize(self.layer_3)
+        self.layer = Background((x, x-24), y, diretorio, index_image, image)
+
+        self.set_psize(self.layer)
 
     def set_psize(self, layer):
         return [layer.set_size(
@@ -33,14 +34,14 @@ class Parallax:
     def _return(self, index, background):
         return background.return_sprite(index)
 
-    def update(s_up, background):
-        s_up.movimento(background)
+    def update(s_up, background, vel):
+        s_up.movimento(background, vel)
 
-        (s_up.loop_movimento(background, index) for index in arange(2))
+        [s_up.loop_movimento(background, index) for index in arange(2)]
 
-    def movimento(self, background):
+    def movimento(self, background, vel):
         [background.movement_aside(
-            background.return_sprite(index), 2
+            background.return_sprite(index), vel
             ) for index in arange(2)]
 
     def loop_movimento(self, background, index):
