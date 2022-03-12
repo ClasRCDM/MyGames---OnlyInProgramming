@@ -13,9 +13,11 @@ from variáveis import ARQUIVO_BACKGROUND
 
 class Background():
     """ Background Sprites """
-    def __init__(self, x, y, diretorio, index, image):
+
+    def __init__(self, x, y,
+                 diretorio, index,
+                 image, flip_vertical=False):
         """ Init Background """
-        super().__init__()
 
         self.x, self.y = x, y
 
@@ -23,7 +25,8 @@ class Background():
 
         # Conjunto de texturas/Carregando texturas
         self.background_texturas = [arcade.Sprite(
-            f"{main_path}_{image}{index}.png", hit_box_algorithm='None'
+            f"{main_path}_{image}{index}.png", hit_box_algorithm='None',
+            flipped_vertically=flip_vertical
             ) for _ in arange(2)]
 
     def set_location(self, background, valor):

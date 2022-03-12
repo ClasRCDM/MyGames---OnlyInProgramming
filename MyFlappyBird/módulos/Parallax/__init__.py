@@ -16,13 +16,16 @@ class Parallax:
     def __init__(self, x, y,
                  diretorio,
                  index_image, image,
-                 max_x, ponto_max):
+                 max_x, ponto_max,
+                 flipp=False):
         """ Init Parallax """
 
         self.MAX_X = max_x
         self.PONTO_X = ponto_max
 
-        self.layer = Background((x, x-24), y, diretorio, index_image, image)
+        self.layer = Background((x, x-24), y,
+                                diretorio, index_image,
+                                image, flipp)
 
         self.set_psize(self.layer)
 
