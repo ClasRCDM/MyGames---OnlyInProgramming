@@ -4,9 +4,7 @@
 # ------ General defs ------ #
 import arcade
 # ------ Game variables ------ #
-# -
 # ------ Window modules ------ #
-# -
 # & \Imports Parallax/ & #
 
 

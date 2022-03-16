@@ -4,7 +4,7 @@
 # ------ General defs ------ #
 import arcade
 from typing import Optional
-from os import path, getcwd  # Get files
+from os import path, getcwd
 # ------ Game variables ------ #
 from variáveis import ARQUIVO
 from variáveis import W_LARGURA, W_ALTURA, W_TÍTULOS
@@ -35,7 +35,7 @@ class Jogo(arcade.Window):
 
     def __init__(self):
         super().__init__(W_LARGURA, W_ALTURA, W_TÍTULOS)
-        # arcade.enable_timings() habilitar quando for ver o fps
+        # arcade.enable_timings()  # habilitar quando for ver o fps
 
         # Janela
         arcade.set_background_color(arcade.csscolor.BLACK)
@@ -46,10 +46,12 @@ class Jogo(arcade.Window):
         self.pássaro_lista: Optional[arcade.SpriteList] = None
 
         # Fundo
-        self.backfore = BackgroundForeground()
+        self.backfore = None
 
         # Physics engine
         self.physics_engine: Optional[arcade.PymunkPhysicsEngine] = None
+
+        self.pulo = True
 
     def setup(self):
         """Inicia o jogo. E caso seja chamado o reinicia."""
@@ -59,6 +61,7 @@ class Jogo(arcade.Window):
         self.pássaro = Bird(3.5, 6, self.diretorio)
 
         # Grupo/Sprite do pássaro/Bird
+        self.backfore = BackgroundForeground()
         self.backfore.create_spritlist()
         self.backfore.set_tiles(self.diretorio)
 
@@ -74,6 +77,14 @@ class Jogo(arcade.Window):
         self.physics_engine = self.pássaro.created_física(damping, gravity)
         self.pássaro.set_física(self.physics_engine)
 
+        self.backfore.set_physics(self.physics_engine)
+
+        def wall_collid(sprite, _wall_sprite, _arbiter, _space, _data):
+            """ Called for Player/Wall collision """
+            self.pulo = False
+
+        self.physics_engine.add_collision_handler("player", "wall", post_handler=wall_collid)
+
     def on_draw(self):
         """Renderisa tudo que a na tela."""
 
@@ -86,11 +97,11 @@ class Jogo(arcade.Window):
         """Movimentos e lógicas do jogo."""
         self.physics_engine.step()
 
-        self.backfore.update_movs()
+        self.backfore.update_movs(self.physics_engine)
 
-        # print(arcade.get_fps()) Get fps
+        # print(arcade.get_fps())  # Get fps
 
     def on_key_press(self, chave, modifiers):
         """Chama sempre que uma tecla é pressionada."""
 
-        self.pássaro.pular(chave, self.physics_engine)
+        if self.pulo: self.pássaro.pular(chave, self.physics_engine)

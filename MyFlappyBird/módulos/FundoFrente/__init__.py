@@ -2,6 +2,7 @@
 
 # & /Imports BackgroundForeground\ & #
 # ------ General defs ------ #
+import arcade
 from arcade import SpriteList
 from typing import Optional
 # ------ Game variables ------ #
@@ -9,6 +10,7 @@ from variáveis import PF_MAX_HORIZONTAL, PF_PONTO_DE_VOLTA
 # ------ Window modules ------ #
 from módulos.Parallax import Parallax
 from módulos.Água import Water
+from módulos.Obstáculos import Obstacles
 # & \Imports BackgroundForeground/ & #
 
 
@@ -18,14 +20,16 @@ class BackgroundForeground:
     def __init__(self):
         """ Init BackgroundForeground """
 
-        self.fundo = {}
+        self.fundo, self.obstáculos = {}, {}
+
         self.fundo_floresta: Optional[SpriteList] = None
         self.fundo_reflexo: Optional[SpriteList] = None
 
     def create_spritlist(self):
-        self.fundo_floresta = SpriteList()
-        self.fundo_reflexo = SpriteList()
+        self.fundo_floresta, self.fundo_reflexo = SpriteList(), SpriteList()
         self.fundo_reflexo.alpha_normalized = 0.8
+
+        self.fundo_obstacles = SpriteList()
 
     def set_move(self, layer, vel):
         self.fundo[layer].update(self.fundo[layer].layer, vel)
@@ -48,6 +52,9 @@ class BackgroundForeground:
         self.create_parallax('layer_7', diretorio, 3.5, -0.89, 0,
                              'Reflexo', True)
 
+        self.fundo['layer_8'] = Obstacles(-60, 0, diretorio, 0, 'Tronco')
+        self.fundo['layer_9'] = Obstacles(-190, 0, diretorio, 1, 'Tronco')
+
     def append_tiles(self):
         self.return_parallax(self.fundo_floresta, 'layer_3')
         self.return_parallax(self.fundo_floresta, 'layer_4')
@@ -56,6 +63,9 @@ class BackgroundForeground:
         self.return_parallax(self.fundo_floresta, 'layer_1')
 
         self.return_parallax(self.fundo_reflexo, 'layer_7')
+
+        self.return_obstacles(self.fundo_obstacles, 'layer_8')
+        self.return_obstacles(self.fundo_obstacles, 'layer_9')
 
     def create_parallax(self, layer,
                         diretorio,
@@ -69,7 +79,13 @@ class BackgroundForeground:
         [tile.append(self.fundo[layer]._return(
             index, self.fundo[layer].layer)) for index in range(2)]
 
-    def update_movs(self):
+    def return_obstacles(self, tile, layer):
+        tile.append(self.fundo[layer].return_sprite(
+            self.fundo[layer].tronco_baixo))
+        tile.append(self.fundo[layer].return_sprite(
+            self.fundo[layer].tronco_cima))
+
+    def update_movs(self, física):
         self.set_move('layer_1', 2)
         self.set_move('layer_2', 0.8)
         self.set_move('layer_3', 0.3)
@@ -77,7 +93,17 @@ class BackgroundForeground:
         self.set_move('layer_5', 1.2)
         self.set_move('layer_7', 2)
 
+        self.fundo['layer_8'].moving(física)
+        self.fundo['layer_9'].moving(física)
+
+    def set_physics(self, física):
+        física.add_sprite_list(self.fundo_obstacles,
+                               friction=0.6,
+                               collision_type="wall",
+                               body_type=arcade.PymunkPhysicsEngine.DYNAMIC)
+
     def draw(self):
         self.fundo_floresta.draw(pixelated=True)
         self.fundo['layer_6'].draw()
         self.fundo_reflexo.draw(pixelated=False)
+        self.fundo_obstacles.draw(pixelated=True)

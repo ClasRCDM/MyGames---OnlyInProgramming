@@ -4,7 +4,6 @@
 # ------ General defs ------ #
 from numpy import arange
 # ------ Game variables ------ #
-# -
 # ------ Window modules ------ #
 from módulos.Floresta import Background
 # & \Imports Parallax/ & #
@@ -23,7 +22,7 @@ class Parallax:
         self.MAX_X = max_x
         self.PONTO_X = ponto_max
 
-        self.layer = Background((x, x-24), y,
+        self.layer = Background((x, x-24.61), y,
                                 diretorio, index_image,
                                 image, flipp)
 
