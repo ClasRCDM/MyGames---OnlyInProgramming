@@ -43,9 +43,10 @@ F_SPRITE_SIZE = int(F_SPRITE_ISIZE * F_SPRITE_PSCALING)
 PF_MAX_HORIZONTAL: float = 1100
 PF_PONTO_DE_VOLTA: float = -1459
 ARQUIVO_BACKGROUND: str = 'texturas/background/background'
+PF_SEQUENCIA_SPRITES = 3, 4, 2, 5, 1
 
 # $ Obstacles Foreground Variables $ #
-# --- PF = Parallax Forest --- #
+# --- O = Obstacles --- #
 O_SPRITE_ISIZE: int = 1
 O_SPRITE_PSCALING = O_SPRITE_TSCALING = 3.5
 O_SPRITE_SIZE = int(O_SPRITE_ISIZE * O_SPRITE_PSCALING)

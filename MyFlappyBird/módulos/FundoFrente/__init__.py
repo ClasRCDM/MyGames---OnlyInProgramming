@@ -1,4 +1,4 @@
-"""Background class file"""
+"""Background and Foreground class file"""
 
 # & /Imports BackgroundForeground\ & #
 # ------ General defs ------ #
@@ -7,9 +7,9 @@ from arcade import SpriteList
 from typing import Optional
 # ------ Game variables ------ #
 from variáveis import PF_MAX_HORIZONTAL, PF_PONTO_DE_VOLTA
+from variáveis import PF_SEQUENCIA_SPRITES
 # ------ Window modules ------ #
-from módulos.Parallax import Parallax
-from módulos.Água import Water
+from módulos.Parallax import Parallax, Water
 from módulos.Obstáculos import Obstacles
 # & \Imports BackgroundForeground/ & #
 
@@ -22,19 +22,17 @@ class BackgroundForeground:
 
         self.fundo, self.obstáculos = {}, {}
 
-        self.fundo_floresta: Optional[SpriteList] = None
-        self.fundo_reflexo: Optional[SpriteList] = None
-
-    def create_spritlist(self):
         self.fundo_floresta, self.fundo_reflexo = SpriteList(), SpriteList()
         self.fundo_reflexo.alpha_normalized = 0.8
 
         self.fundo_obstacles = SpriteList()
 
     def set_move(self, layer, vel):
+        """ Move parallax sprite """
         self.fundo[layer].update(self.fundo[layer].layer, vel)
 
     def set_tiles(self, diretorio):
+        """ Create all tiles """
         self.create_parallax('layer_1', diretorio, 3.6, 6.4, 2,
                              'Floresta')
         self.create_parallax('layer_2', diretorio, 3.4, 6, 1,
@@ -56,14 +54,15 @@ class BackgroundForeground:
         self.fundo['layer_9'] = Obstacles(-190, 0, diretorio, 1, 'Tronco')
 
     def append_tiles(self):
-        self.return_parallax(self.fundo_floresta, 'layer_3')
-        self.return_parallax(self.fundo_floresta, 'layer_4')
-        self.return_parallax(self.fundo_floresta, 'layer_2')
-        self.return_parallax(self.fundo_floresta, 'layer_5')
-        self.return_parallax(self.fundo_floresta, 'layer_1')
+        """ Add all tiles """
+        # -- Set Parallax sprites to sprite group
+        [self.return_parallax(self.fundo_floresta, f'layer_{index}')
+         for index in PF_SEQUENCIA_SPRITES]
 
+        # -- Add reflection sprites to sprite group
         self.return_parallax(self.fundo_reflexo, 'layer_7')
 
+        # -- Set Obstacles sprites to sprite group
         self.return_obstacles(self.fundo_obstacles, 'layer_8')
         self.return_obstacles(self.fundo_obstacles, 'layer_9')
 
@@ -71,21 +70,25 @@ class BackgroundForeground:
                         diretorio,
                         x, y, index,
                         modelo, flip=False):
+        """ Create object Parallax """
         self.fundo[layer] = Parallax(
             x, y, diretorio, index, modelo,
             PF_MAX_HORIZONTAL, PF_PONTO_DE_VOLTA, flipp=flip)
 
     def return_parallax(self, tile, layer):
+        """ Set the parallax to the group sprite """
         [tile.append(self.fundo[layer]._return(
             index, self.fundo[layer].layer)) for index in range(2)]
 
     def return_obstacles(self, tile, layer):
+        """ Set the obstacle to the group sprite """
         tile.append(self.fundo[layer].return_sprite(
             self.fundo[layer].tronco_baixo))
         tile.append(self.fundo[layer].return_sprite(
             self.fundo[layer].tronco_cima))
 
     def update_movs(self, física):
+        """ Moving the sprites  """
         self.set_move('layer_1', 2)
         self.set_move('layer_2', 0.8)
         self.set_move('layer_3', 0.3)
@@ -97,12 +100,14 @@ class BackgroundForeground:
         self.fundo['layer_9'].moving(física)
 
     def set_physics(self, física):
+        """ Create physics for the obstacles """
         física.add_sprite_list(self.fundo_obstacles,
                                friction=0.6,
                                collision_type="wall",
                                body_type=arcade.PymunkPhysicsEngine.DYNAMIC)
 
     def draw(self):
+        """ Draw sprites groups """
         self.fundo_floresta.draw(pixelated=True)
         self.fundo['layer_6'].draw()
         self.fundo_reflexo.draw(pixelated=False)

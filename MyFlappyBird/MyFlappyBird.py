@@ -62,7 +62,6 @@ class Jogo(arcade.Window):
 
         # Grupo/Sprite do pássaro/Bird
         self.backfore = BackgroundForeground()
-        self.backfore.create_spritlist()
         self.backfore.set_tiles(self.diretorio)
 
         # Adiciona os sprites nos grupos
