@@ -44,6 +44,7 @@ PF_MAX_HORIZONTAL: float = 1100
 PF_PONTO_DE_VOLTA: float = -1459
 ARQUIVO_BACKGROUND: str = 'texturas/background/background'
 PF_SEQUENCIA_SPRITES = 3, 4, 2, 5, 1
+PF_SEQUENCIA_SSPEED = 2, 0.8, 0.3, 0.3, 1.2
 
 # $ Obstacles Foreground Variables $ #
 # --- O = Obstacles --- #

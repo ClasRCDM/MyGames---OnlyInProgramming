@@ -1,11 +1,11 @@
 """Object class file"""
 
-# & /Imports Background\ & #
+# & /Imports Objects\ & #
 # ------ General defs ------ #
 from os import path
 from typing import Union
 from arcade import Sprite
-# & \Imports Background/ & #
+# & \Imports Objects/ & #
 
 
 class Object:
