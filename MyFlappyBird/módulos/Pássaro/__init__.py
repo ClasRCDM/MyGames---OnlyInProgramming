@@ -33,9 +33,9 @@ class Bird(Sprite):
         self.voando_texturas = [load_texture_pair(
             f"{main_path}_voando{texture}.png") for texture in arange(8)]
         self.parado_texturas = [load_texture_pair(
-            f"{main_path}_voando{texture}.png") for texture in arange(2)]
+            f"{main_path}_parado{texture}.png") for texture in arange(2)]
         self.ciscando_texturas = [load_texture_pair(
-            f"{main_path}_voando{texture}.png") for texture in arange(3)]
+            f"{main_path}_ciscando{texture}.png") for texture in arange(3)]
 
         # Textura_Inicial
         self.texture = self.parado_texturas[0][0]
@@ -78,6 +78,9 @@ class Bird(Sprite):
     def set_bird_location(self):
         self.center_x = B_SPRITE_SIZE * self.x + B_SPRITE_SIZE / 2
         self.center_y = B_SPRITE_SIZE * self.y + B_SPRITE_SIZE / 2
+
+    def _update_setmode(self, game_mode):
+        self.game_mode: str = game_mode
 
     def created_física(self, damping, gravity):
         return PymunkPhysicsEngine(damping=damping, gravity=gravity)

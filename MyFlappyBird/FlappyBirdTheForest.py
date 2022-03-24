@@ -28,12 +28,13 @@ class Jogo(arcade.Window):
 
     @classmethod
     def main(cls):
-        """ Main function """
+        """ Create window """
         janela = Jogo()
         janela.setup()
         arcade.run()
 
     def __init__(self):
+        """ Main function """
         super().__init__(W_LARGURA, W_ALTURA, W_TÍTULOS)
         # arcade.enable_timings()  # habilitar quando for ver o fps
 
@@ -42,7 +43,7 @@ class Jogo(arcade.Window):
         self.center_window()
 
         # Game
-        self.Modo_jogo: str = 'Tela_Inicial'
+        self.Modo_jogo: str = 'Gameplay'
 
         # Pássaro/Bird
         self.pássaro: Optional[arcade.Sprite] = None
@@ -72,26 +73,32 @@ class Jogo(arcade.Window):
 
         self.physics_engine = self.pássaro.created_física(damping, gravity)
 
-        if self.Modo_jogo == 'Tela_Inicial':
-            self.tela_inicial()
-        elif self.Modo_jogo == 'Gameplay':
-            self.gameplay()
+        # - Add sprites backgrounds_
+        self.backfore.append_tiles()
+        # -- Add sprite bird_
+        self.pássaro_lista.append(self.pássaro)
+
+        # %__ Physics __$ #
+        self.pássaro.set_física(self.physics_engine)  # For Bird
+        self.backfore.set_physics(self.physics_engine)  # For Obstacles
+
+        # %__ Physics/Collision response to obstacle __$ #
+        def wall_collid(sprite, _wall_sprite, _arbiter, _space, _data):
+            """ Called for Player/Wall collision """
+            self.pássaro_pulo = False
+        # Add response physics
+        self.physics_engine.add_collision_handler("player", "wall", post_handler=wall_collid)
 
     def on_draw(self):
         """Renderisa tudo que a na tela."""
 
         self.clear()
 
-        if self.Modo_jogo == 'Tela_Inicial':
-            pass
-        elif self.Modo_jogo == 'Gameplay':
-            pass
-
         self.backfore.draw()
         self.pássaro_lista.draw(pixelated=True)
 
     def on_update(self, delta_time):
-        """Movimentos e lógicas do jogo."""
+        """ Movimentos e lógicas do jogo. """
 
         if self.Modo_jogo == 'Tela_Inicial':
             pass
@@ -102,29 +109,13 @@ class Jogo(arcade.Window):
         # print(arcade.get_fps())  # Get fps
 
     def on_key_press(self, chave, modifiers):
-        """Chama sempre que uma tecla é pressionada."""
+        """ Chama sempre que uma tecla é pressionada. """
 
         if self.pássaro_pulo: self.pássaro.pular(chave, self.physics_engine)
 
         if chave == arcade.key.F and self.Modo_jogo != 'Gameplay':
             self.Modo_jogo = 'Gameplay'
+            self.pássaro._update_setmode(self.Modo_jogo)
         elif chave == arcade.key.F and self.Modo_jogo == 'Gameplay':
             self.Modo_jogo = 'Tela_Inicial'
-
-    def tela_inicial(self):
-        # - Add sprites backgrounds_
-        self.backfore.append_tiles()
-        # -- Add sprite bird_
-        self.pássaro_lista.append(self.pássaro)
-
-        # %__ Physics __$ #
-        self.pássaro.set_física(self.physics_engine)  # For Bird
-        self.backfore.set_physics(self.physics_engine)  # For Obstacles
-
-    def gameplay(self):
-
-        def wall_collid(sprite, _wall_sprite, _arbiter, _space, _data):
-            """ Called for Player/Wall collision """
-            self.pulo = False
-
-        self.physics_engine.add_collision_handler("player", "wall", post_handler=wall_collid)
+            self.pássaro._update_setmode(self.Modo_jogo)

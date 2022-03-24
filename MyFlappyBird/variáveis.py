@@ -4,7 +4,7 @@
 # /absolute variables of the world\ #
 W_ALTURA, W_LARGURA = 700, 400
 TELA_CHEIA: tuple[int, int] = W_ALTURA, W_LARGURA
-W_TÍTULOS: str = 'FlappyGame...'
+W_TÍTULOS: str = 'FlappyGame: The Forest'
 
 W_GRAVIDADE: int = 1500
 
@@ -26,8 +26,7 @@ B_JUMP_IMPULSE: int = 1800
 B_MAXH_SPEED: int = 450
 B_MAXV_SPEED: int = 1200
 B_MAXC_ROTAÇÃO, B_MAXB_ROTAÇÃO = -45, 45
-B_ANIMATION_SPEED: float = 0.35
-B_SET_ANGULO: int = 6
+B_ANIMATION_SPEED, B_SET_ANGULO = 0.35, 6
 B_SPRITE_SIZE = int(B_SPRITE_ISIZE * B_SPRITE_PSCALING)
 
 DEFAULT_DAMPING: float = 1.0
