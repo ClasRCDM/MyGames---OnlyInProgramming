@@ -2,10 +2,10 @@
 
 # & /Imports Bird\ & #
 # ------ General defs ------ #
-from arcade import Sprite, load_texture_pair
-from arcade import PymunkPhysicsEngine, key
 from os import path
 from numpy import arange
+from arcade import Sprite, load_texture_pair
+from arcade import PymunkPhysicsEngine, key
 # ------ Game variables ------ #
 from variáveis import B_SPRITE_TSCALING, B_JUMP_IMPULSE
 from variáveis import B_SET_ANGULO, B_SPRITE_SIZE
@@ -46,7 +46,9 @@ class Bird(Sprite):
         self.rotação: int = 0
         self.frames_texture: int = 7
 
-        self.set_bird_location()
+        self.jump_init = 0
+
+        self.set_location()
 
     def pymunk_moved(self, physics_engine, dx, dy, d_angle):
         """ Handle being moved by the pymunk engine """
@@ -58,6 +60,11 @@ class Bird(Sprite):
                 self.set_animation_sprites(
                     self.frames_texture, B_ANIMATION_SPEED, self.parado_texturas)
         elif self.game_mode == 'Gameplay':
+            if self.jump_init < 1:
+                impulse = (0, B_JUMP_IMPULSE)
+                physics_engine.apply_impulse(self, impulse)
+                self.jump_init += 1
+
             # Animação de voar
             if not is_on_ground and dy > 0.1 and abs(self.y_odometer) > 5:
                 self.set_animation_sprites(
@@ -75,15 +82,12 @@ class Bird(Sprite):
         self.index_texture = (self.index_texture + speed_sprite) % q_sprite
         self.texture = sprites[int(self.index_texture)][0]
 
-    def set_bird_location(self):
+    def set_location(self):
         self.center_x = B_SPRITE_SIZE * self.x + B_SPRITE_SIZE / 2
-        self.center_y = B_SPRITE_SIZE * self.y + B_SPRITE_SIZE / 2
+        self.center_y = B_SPRITE_SIZE * self.y-255 + B_SPRITE_SIZE / 2
 
     def _update_setmode(self, game_mode):
         self.game_mode: str = game_mode
-
-    def created_física(self, damping, gravity):
-        return PymunkPhysicsEngine(damping=damping, gravity=gravity)
 
     def set_física(self, física):
         física.add_sprite(self,

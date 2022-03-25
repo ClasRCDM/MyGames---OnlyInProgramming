@@ -52,3 +52,8 @@ O_SPRITE_PSCALING = O_SPRITE_TSCALING = 3.5
 O_SPRITE_SIZE = int(O_SPRITE_ISIZE * O_SPRITE_PSCALING)
 ARQUIVO_OBSTACLES: str = 'texturas/obstacles/'
 O_MAX_HORIZONTAL: int = 600
+
+# $ Variables decorations $ #
+# --- D = Decorations --- #
+D_SPRITE_ROCK: str = 'texturas/decorations/Pedra_grande.png'
+D_SPRITE_STEAKHOUSE: str = 'texturas/decorations/ChurrascariaCAp.png'

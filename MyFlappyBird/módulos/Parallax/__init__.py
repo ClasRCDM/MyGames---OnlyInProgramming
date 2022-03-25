@@ -89,12 +89,16 @@ class Background(Object):
 
 
 class Water:
-    def __init__(self, x, y, altura, largura):
-        self.x, self.y = x, y
+    """ Water init """
 
+    def __init__(self, x, y, altura, largura):
+        """ Water variables """
+
+        self.x, self.y = x, y
         self.altura, self.largura = altura, largura
 
     def draw(self):
+        """ Draw Water """
         draw_rectangle_filled(self.x, self.y,
                               self.largura, self.altura,
                               csscolor.AQUA)

@@ -43,7 +43,7 @@ class Jogo(arcade.Window):
         self.center_window()
 
         # Game
-        self.Modo_jogo: str = 'Gameplay'
+        self.Modo_jogo: str = 'Tela_Inicial'
 
         # Pássaro/Bird
         self.pássaro: Optional[arcade.Sprite] = None
@@ -71,7 +71,7 @@ class Jogo(arcade.Window):
         damping = DEFAULT_DAMPING
         gravity = (0, -W_GRAVIDADE)
 
-        self.physics_engine = self.pássaro.created_física(damping, gravity)
+        self.physics_engine = arcade.PymunkPhysicsEngine(damping=damping, gravity=gravity)
 
         # - Add sprites backgrounds_
         self.backfore.append_tiles()
@@ -100,9 +100,7 @@ class Jogo(arcade.Window):
     def on_update(self, delta_time):
         """ Movimentos e lógicas do jogo. """
 
-        if self.Modo_jogo == 'Tela_Inicial':
-            pass
-        elif self.Modo_jogo == 'Gameplay':
+        if self.Modo_jogo == 'Gameplay':
             self.physics_engine.step()
             self.backfore.update_movs(self.physics_engine)
 
