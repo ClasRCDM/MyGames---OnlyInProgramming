@@ -17,25 +17,32 @@ from variáveis import B_MAXV_SPEED, B_MAXH_SPEED
 
 class Bird(Sprite):
     """ Bird Sprite """
-    def __init__(self, x, y, diretorio, game_mode):
+
+    @classmethod
+    def load_text(cls, name: str, main_path: str, amount: int):
+        return [load_texture_pair(
+            f"{main_path}_{name}{texture}.png") for texture in arange(amount)]
+
+    def __init__(self, pos: tuple[int, int],
+                 diretorio: str, game_mode: str):
+
         """ Init Bird """
         super().__init__()
 
-        self.x, self.y = x, y
+        self.x, self.y = pos
+        self.center_x, self.center_y = self.set_location()
+
         self.game_mode: str = game_mode
-        self.scale: float = B_SPRITE_TSCALING
+        self.scale = B_SPRITE_TSCALING
 
         main_path_cor = 'verde', 'vermelho', 'azul'
         main_path: str = path.join(
             diretorio, f'texturas/Animation_bird/{main_path_cor[0]}/Passaro_{main_path_cor[0]}')
 
         # Conjunto de texturas/Carregando texturas
-        self.voando_texturas = [load_texture_pair(
-            f"{main_path}_voando{texture}.png") for texture in arange(8)]
-        self.parado_texturas = [load_texture_pair(
-            f"{main_path}_parado{texture}.png") for texture in arange(2)]
-        self.ciscando_texturas = [load_texture_pair(
-            f"{main_path}_ciscando{texture}.png") for texture in arange(3)]
+        self.voando_texturas = self.load_text("voando", main_path, 8)
+        self.parado_texturas = self.load_text("parado", main_path, 2)
+        # self.ciscando_texturas = self.load_text("ciscando", main_path, 3)
 
         # Textura_Inicial
         self.texture = self.parado_texturas[0][0]
@@ -47,8 +54,6 @@ class Bird(Sprite):
         self.frames_texture: int = 7
 
         self.jump_init = 0
-
-        self.set_location()
 
     def pymunk_moved(self, physics_engine, dx, dy, d_angle):
         """ Handle being moved by the pymunk engine """
@@ -83,11 +88,15 @@ class Bird(Sprite):
         self.texture = sprites[int(self.index_texture)][0]
 
     def set_location(self):
-        self.center_x = B_SPRITE_SIZE * self.x + B_SPRITE_SIZE / 2
-        self.center_y = B_SPRITE_SIZE * self.y-255 + B_SPRITE_SIZE / 2
+        return B_SPRITE_SIZE * self.x + B_SPRITE_SIZE / 2, B_SPRITE_SIZE * self.y-245 + B_SPRITE_SIZE / 2
 
     def _update_setmode(self, game_mode):
         self.game_mode: str = game_mode
+
+    def pular(self, chave, física):
+        if chave == key.UP or chave == key.SPACE:
+            impulse = (0, B_JUMP_IMPULSE)
+            física.apply_impulse(self, impulse)
 
     def set_física(self, física):
         física.add_sprite(self,
@@ -97,8 +106,3 @@ class Bird(Sprite):
                           max_vertical_velocity=B_MAXV_SPEED,
                           max_horizontal_velocity=B_MAXH_SPEED,
                           collision_type="player")
-
-    def pular(self, chave, física):
-        if chave == key.UP or chave == key.SPACE:
-            impulse = (0, B_JUMP_IMPULSE)
-            física.apply_impulse(self, impulse)

@@ -37,11 +37,10 @@ class Object:
         """ Adding positions """
 
         if not v_pro:
-            background.center_x = sprite_size * pos[0] + sprite_size / 2
-            background.center_y = sprite_size * pos[1] + sprite_size / 2
+            background.set_position(sprite_size * pos[0] + sprite_size / 2,
+                                    sprite_size * pos[1] + sprite_size / 2)
         elif v_pro:
-            background.center_x = pos[0]
-            background.center_y = pos[1]
+            background.set_position(pos[0], pos[1])
 
     def set_scaling(self, background: Sprite, sprite_scaling: float):
         """ adding scales """

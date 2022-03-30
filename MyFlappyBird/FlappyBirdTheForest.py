@@ -57,7 +57,7 @@ class Jogo(arcade.Window):
         self.physics_engine: Optional[arcade.PymunkPhysicsEngine] = None
 
     def setup(self):
-        """Inicia o jogo. E caso seja chamado o reinicia."""
+        """ Inicia o jogo. E caso seja chamado o reinicia. """
 
         # Backgrounds
         self.backfore = BackgroundForeground()
@@ -65,7 +65,7 @@ class Jogo(arcade.Window):
 
         # Grupo/Sprite do pássaro/Bird
         self.pássaro_lista = arcade.SpriteList()
-        self.pássaro = Bird(3.5, 6, self.diretorio, self.Modo_jogo)
+        self.pássaro = Bird((3.5, 6), self.diretorio, self.Modo_jogo)
 
         # --- Pymunk Physics Engine Setup --- #
         damping = DEFAULT_DAMPING
@@ -80,7 +80,7 @@ class Jogo(arcade.Window):
 
         # %__ Physics __$ #
         self.pássaro.set_física(self.physics_engine)  # For Bird
-        self.backfore.set_physics(self.physics_engine)  # For Obstacles
+        self.backfore.set_física(self.physics_engine)  # For Obstacles
 
         # %__ Physics/Collision response to obstacle __$ #
         def wall_collid(sprite, _wall_sprite, _arbiter, _space, _data):
@@ -111,9 +111,6 @@ class Jogo(arcade.Window):
 
         if self.pássaro_pulo: self.pássaro.pular(chave, self.physics_engine)
 
-        if chave == arcade.key.F and self.Modo_jogo != 'Gameplay':
+        if chave == arcade.key.SPACE and self.Modo_jogo != 'Gameplay':
             self.Modo_jogo = 'Gameplay'
-            self.pássaro._update_setmode(self.Modo_jogo)
-        elif chave == arcade.key.F and self.Modo_jogo == 'Gameplay':
-            self.Modo_jogo = 'Tela_Inicial'
             self.pássaro._update_setmode(self.Modo_jogo)

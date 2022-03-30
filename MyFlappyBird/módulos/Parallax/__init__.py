@@ -1,7 +1,7 @@
 """Parallax program file"""
 
 # & /Imports Parallax\ & #
-# ------ General defs ------ #
+# ------ General defs ------ #]
 from numpy import arange
 from arcade import Sprite
 from arcade import draw_rectangle_filled, csscolor
@@ -13,11 +13,22 @@ from módulos.Objeto import Object
 # & \Imports Parallax/ & #
 
 
+def Iterator(val, op=0):
+    if op == 0:
+        ite = (index for index in arange(val))
+    elif op == 1:
+        ite = (index for index in val)
+    elif op == 2:
+        ite = (index for index in enumerate(val))
+
+    return ite
+
+
 class Parallax:
     """ Parallax class file """
 
     def __init__(self, x, y,
-                 diretorio,
+                 diretorio: str,
                  index, image,
                  max_x, ponto_max,
                  flipp=False):
@@ -30,12 +41,13 @@ class Parallax:
                                 diretorio, index,
                                 image, flipp)
 
-        self.set_psize(self.layer)
+        self.set_psize(self.layer, 2)
 
-    def set_psize(self, layer) -> Object:
-        return [layer.set_size(
-            layer.return_sprite(index), index
-            ) for index in arange(2)]
+    def set_psize(self, layer, value):
+
+        nuns = Iterator(value)
+        for index in nuns:
+            layer.set_size(self.layer.return_sprite(index), index)
 
     def _return(self, index, background: Object) -> Sprite:
         return background.return_sprite(index)
@@ -47,9 +59,10 @@ class Parallax:
         s_up.loop_movimento(background, 1)
 
     def movimento(self, background, vel):
-        [background.movement_aside(
-            background.return_sprite(index), vel
-            ) for index in arange(2)]
+
+        nuns = Iterator(2)
+        for index in nuns:
+            background.movement_aside(background.return_sprite(index), vel)
 
     def loop_movimento(self, background, index):
         if background.return_sprite(index).center_x >= self.MAX_X:
@@ -80,7 +93,7 @@ class Background(Object):
                           (self.x[valor], self.y))
         self.set_scaling(background, F_SPRITE_TSCALING)
 
-    def return_sprite(self, index):
+    def return_sprite(self, index) -> Sprite:
         """ return background sprite """
         return self.background_texturas[index]
 
@@ -91,7 +104,7 @@ class Background(Object):
 class Water:
     """ Water init """
 
-    def __init__(self, x, y, altura, largura):
+    def __init__(self, x, y, altura, largura, DIRETORIO):
         """ Water variables """
 
         self.x, self.y = x, y
