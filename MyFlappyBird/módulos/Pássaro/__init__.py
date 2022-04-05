@@ -87,7 +87,7 @@ class Bird(Sprite):
         self.index_texture = (self.index_texture + speed_sprite) % q_sprite
         self.texture = sprites[int(self.index_texture)][0]
 
-    def set_location(self):
+    def set_location(self) -> int | float:
         return B_SPRITE_SIZE * self.x + B_SPRITE_SIZE / 2, B_SPRITE_SIZE * self.y-245 + B_SPRITE_SIZE / 2
 
     def _update_setmode(self, game_mode):

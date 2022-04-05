@@ -9,8 +9,9 @@ from variáveis import PF_MAX_HORIZONTAL, PF_PONTO_DE_VOLTA
 from variáveis import PF_SEQUENCIA_SPRITES, PF_SEQUENCIA_SSPEED
 # ------ Window modules ------ #
 from módulos.Obstáculos import Obstacles
-from módulos.Parallax import Parallax, Water, Iterator
-from módulos.Decorações import Big_rock, Leave_particle
+from módulos.Parallax import Parallax, Water
+from módulos.Parallax import Spawn_leaves, Iterator
+from módulos.Decorações import Big_rock
 # & \Imports Background Foreground/ & #
 
 
@@ -27,8 +28,11 @@ class BackgroundForeground:
         self.tile_floresta, self.tile_reflexo = SpriteList(), SpriteList()
         self.tile_reflexo.alpha_normalized = 0.8
 
-        # Group sprite obstacles
+        # Group sprite Obstacles
         self.tile_obstacles, self.tile_objects = SpriteList(), SpriteList()
+
+        # Group sprite Effects/GUI
+        self.tile_effects, self.tile_GUI = SpriteList(), SpriteList()
 
     def set_move(self, layer, vel):
         """ Move parallax sprite """
@@ -38,7 +42,8 @@ class BackgroundForeground:
         """ Create all tiles """
 
         # -- Objects Parallax
-        self.tile['layer_1'] = self.set_pllx(diretorio, 3.6, 6.4, 2, 'Floresta')
+        self.tile['layer_1'] = self.set_pllx(diretorio, 3.6, 6.4, 2, 'Floresta_Troncos')
+        self.tile['layer_1_sheet'] = self.set_pllx(diretorio, 3.6, 6.4, 2, 'Floresta_Folhas')
         self.tile['layer_2'] = self.set_pllx(diretorio, 3.4, 6, 1, 'Floresta')
         self.tile['layer_3'] = self.set_pllx(diretorio, 3.5, 6.8, 0, 'Floresta')
         self.tile['layer_4'] = self.set_pllx(diretorio, 2.5, 15, 0, 'Lights')
@@ -54,14 +59,15 @@ class BackgroundForeground:
         self.tile['layer_9'] = Obstacles(-190, 0, diretorio, 1, 'Tronco')
 
         self.tile['layer_10'] = Big_rock((3.4, -1), diretorio)
-        self.tile['layer_12'] = Leave_particle((3, 6), diretorio)
 
-    def append_tiles(self):
+    def append_tiles(self, diretorio, física):
         """ Add all tiles """
+
         # -- Set Parallax sprites to sprite group
         nuns = Iterator(PF_SEQUENCIA_SPRITES, op=1)
         for index in nuns:
             self.return_parallax(self.tile_floresta, f'layer_{index}')
+        self.return_parallax(self.tile_objects, 'layer_1_sheet')
 
         # -- Add reflection sprites to sprite group
         self.return_sprites(self.tile_reflexo,
@@ -89,7 +95,11 @@ class BackgroundForeground:
 
         # -- Add Objects sprites to sprite group
         self.tile_objects.append(self.tile['layer_10'])
-        self.tile_objects.append(self.tile['layer_12'])
+        self.leaves = Spawn_leaves(self.tile['layer_3'].layer.x_y,
+                                   diretorio, física)
+
+        # First leaves
+        self.spawns_leaves()
 
     def update_movs(self, física):
         """ Moving the sprites  """
@@ -97,24 +107,40 @@ class BackgroundForeground:
         nuns = Iterator(PF_SEQUENCIA_SSPEED, op=2)
         for index, speed in nuns:
             self.set_move(f'layer_{index+1}', speed)
+        self.set_move('layer_1_sheet', 2)
 
+        # Water reflection movement
         self.set_move('layer_7', 2)
         self.set_move('layer_11', 2)
 
+        # Wooden logs movement
         self.tile['layer_8'].moving(física)
         self.tile['layer_9'].moving(física)
 
-        if not self.tile['layer_10'].center_x >= 500:
-            self.tile_objects.move(2, 0)
+        # moving stone
+        self.tile['layer_10'].move(2)
+
+        # -- General effects
+        self.spawns_leaves()
+
+    def spawns_leaves(self):
+        """ Leaf spawn with physics  """
+
+        if len(self.tile_effects) <= 0:
+            for effect in self.leaves.generate():
+                effect.random_pos()
+                self.tile_effects.append(effect)
 
     def return_parallax(self, tiles, layer):
         """ Set the parallax to the group sprite """
+
         tiles.append(self.tile[layer]._return(
             0, self.tile[layer].layer))
         tiles.append(self.tile[layer]._return(
             1, self.tile[layer].layer))
 
     def return_sprites(self, tiles, object1, object2, v=None):
+        """ Add sprites to drawing lists """
         if v is None:
             tiles.append(object1(object2[0]))
             tiles.append(object1(object2[1]))
@@ -125,7 +151,7 @@ class BackgroundForeground:
     def set_pllx(self,
                  diretorio,
                  x, y, index,
-                 modelo, flip=False):
+                 modelo, flip=False) -> Parallax:
         """ Create object Parallax """
 
         return Parallax(x, y, diretorio, index, modelo,
@@ -143,8 +169,8 @@ class BackgroundForeground:
         self.tile_floresta.draw(pixelated=True)
         self.tile['layer_6'].draw()
 
-        if not self.tile['layer_10'].center_x >= 500:
-            self.tile_objects.draw(pixelated=True)
+        self.tile_effects.draw(pixelated=True)
+        self.tile_objects.draw(pixelated=True)
 
         self.tile_reflexo.draw(pixelated=True)
         self.tile_obstacles.draw(pixelated=True)

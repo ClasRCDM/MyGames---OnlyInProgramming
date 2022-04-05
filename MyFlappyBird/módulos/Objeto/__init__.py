@@ -25,6 +25,8 @@ class Object:
         self.x = x if x is not None else 0
         self.y = y if y is not None else 0
 
+        self.x_y = self.x, self.y
+
         self.index = index if index is not None else 0
         self.image = image if image is not None else 'image'
 

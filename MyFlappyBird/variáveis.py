@@ -10,6 +10,8 @@ W_GRAVIDADE: int | float = 1500
 
 ARQUIVO: str = 'MyFlappyBird'
 TEXTURAS = lambda a: f'texturas/{a}/'
+
+DEFAULT_DAMPING: float = 1.0
 # \absolute variables of the world/ #
 # -----------------------------------#
 
@@ -23,14 +25,12 @@ B_SPRITE_PSCALING = B_SPRITE_TSCALING = 3.9
 B_DAMPING: float | int = 0.4
 B_FRICTION: float | int = 1.0
 B_MASSA: float | int = 1.96
-B_JUMP_IMPULSE: int | float = 1800
+B_JUMP_IMPULSE: int | float = 1400
 B_MAXH_SPEED: int | float = 450
 B_MAXV_SPEED: int | float = 1200
 B_MAXC_ROTAÇÃO, B_MAXB_ROTAÇÃO = -45, 45
 B_ANIMATION_SPEED, B_SET_ANGULO = 0.35, 6
 B_SPRITE_SIZE = int(B_SPRITE_ISIZE * B_SPRITE_PSCALING)
-
-DEFAULT_DAMPING: float = 1.0
 
 # $ Background variables $ #
 # --- F = Fundo/Background --- #
@@ -62,3 +62,4 @@ WA_ARQUIVO = TEXTURAS('background') + 'effect_water.png'
 # --- D = Decorations --- #
 D_SPRITE_ROCK: str = TEXTURAS('decorations') + 'Pedra_grande.png'
 D_SPRITE_LEAVES = [TEXTURAS('decorations') + f'Leaves/Leave_{num}.png' for num in range(5)]
+D_LEAVES_POS = [(7, 11), (4, 12), (2, 13.5), (0, 11), (6.5, 13)]

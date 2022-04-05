@@ -71,23 +71,25 @@ class Jogo(arcade.Window):
         damping = DEFAULT_DAMPING
         gravity = (0, -W_GRAVIDADE)
 
-        self.physics_engine = arcade.PymunkPhysicsEngine(damping=damping, gravity=gravity)
+        self.physics_world = arcade.PymunkPhysicsEngine(damping=damping, gravity=gravity)
+        self.physics_leave = arcade.PymunkPhysicsEngine(damping=damping, gravity=(0, -100))
 
         # - Add sprites backgrounds_
-        self.backfore.append_tiles()
+        self.backfore.append_tiles(self.diretorio, self.physics_leave)
         # -- Add sprite bird_
         self.pássaro_lista.append(self.pássaro)
 
         # %__ Physics __$ #
-        self.pássaro.set_física(self.physics_engine)  # For Bird
-        self.backfore.set_física(self.physics_engine)  # For Obstacles
+        self.pássaro.set_física(self.physics_world)  # For Bird
+        self.backfore.set_física(self.physics_world)  # For Obstacles
 
         # %__ Physics/Collision response to obstacle __$ #
         def wall_collid(sprite, _wall_sprite, _arbiter, _space, _data):
             """ Called for Player/Wall collision """
             self.pássaro_pulo = False
         # Add response physics
-        self.physics_engine.add_collision_handler("player", "wall", post_handler=wall_collid)
+        self.physics_world.add_collision_handler(
+            "player", "wall", post_handler=wall_collid)
 
     def on_draw(self):
         """Renderisa tudo que a na tela."""
@@ -101,15 +103,16 @@ class Jogo(arcade.Window):
         """ Movimentos e lógicas do jogo. """
 
         if self.Modo_jogo == 'Gameplay':
-            self.physics_engine.step()
-            self.backfore.update_movs(self.physics_engine)
+            self.physics_world.step()
+            self.backfore.update_movs(self.physics_world)
 
+        self.physics_leave.step()
         # print(arcade.get_fps())  # Get fps
 
     def on_key_press(self, chave, modifiers):
         """ Chama sempre que uma tecla é pressionada. """
 
-        if self.pássaro_pulo: self.pássaro.pular(chave, self.physics_engine)
+        if self.pássaro_pulo: self.pássaro.pular(chave, self.physics_world)
 
         if chave == arcade.key.SPACE and self.Modo_jogo != 'Gameplay':
             self.Modo_jogo = 'Gameplay'

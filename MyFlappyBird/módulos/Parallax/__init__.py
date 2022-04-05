@@ -2,26 +2,27 @@
 
 # & /Imports Parallax\ & #
 # ------ General defs ------ #]
+from tokenize import Number
 from numpy import arange
 from arcade import Sprite
 from arcade import draw_rectangle_filled, csscolor
 # ------ Game variables ------ #
 from variáveis import F_SPRITE_SIZE, F_SPRITE_TSCALING
-from variáveis import ARQUIVO_BACKGROUND
+from variáveis import ARQUIVO_BACKGROUND, D_LEAVES_POS
 # ------ Window modules ------ #
 from módulos.Objeto import Object
+from módulos.Decorações import Leave_particle
 # & \Imports Parallax/ & #
 
 
-def Iterator(val, op=0):
-    if op == 0:
-        ite = (index for index in arange(val))
-    elif op == 1:
-        ite = (index for index in val)
-    elif op == 2:
-        ite = (index for index in enumerate(val))
-
-    return ite
+def Iterator(val, op=0) -> Number:
+    match op:
+        case 1:
+            return (index for index in val)
+        case 2:
+            return (index for index in enumerate(val))
+        case _:
+            return (index for index in arange(val))
 
 
 class Parallax:
@@ -118,3 +119,22 @@ class Water:
         draw_rectangle_filled(self.x, self.y+30,
                               self.largura, 5,
                               csscolor.LIGHT_CYAN)
+
+
+class Spawn_leaves:
+    def __init__(self, pos, diretorio, física) -> None:
+
+        self.x, self.y = pos
+
+        self.diretorio = diretorio
+        self.física = física
+
+    def leave(self, pos) -> Leave_particle:
+        return Leave_particle(pos, self.diretorio, self.física)
+
+    def generate(self):
+        poss = Iterator(D_LEAVES_POS, op=1)
+        leaves = [self.leave((self.x + pos[0], self.y + pos[1]))
+                  for pos in poss]
+
+        return leaves
