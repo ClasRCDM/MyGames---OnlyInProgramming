@@ -7,7 +7,7 @@ from random import randint, uniform
 from arcade import Sprite, load_texture_pair
 # ------ Game variables ------ #
 from variáveis import B_SPRITE_TSCALING, B_SPRITE_SIZE
-from variáveis import D_SPRITE_ROCK, D_SPRITE_LEAVES
+from variáveis import D_SPRITE_ROCK, EL_SPRITE_LEAVES
 # & \Imports decorations/ & #
 
 
@@ -63,7 +63,7 @@ class Leave_particle(Sprite):
 
         # Add texture
         main_path: str = path.join(
-            diretorio, D_SPRITE_LEAVES[randint(0, 4)])
+            diretorio, EL_SPRITE_LEAVES[randint(0, 4)])
 
         self.sprite = load_texture_pair(main_path)
 

@@ -10,7 +10,7 @@ from arcade import PymunkPhysicsEngine, key
 from variáveis import B_SPRITE_TSCALING, B_JUMP_IMPULSE
 from variáveis import B_SET_ANGULO, B_SPRITE_SIZE
 from variáveis import B_MAXC_ROTAÇÃO, B_MAXB_ROTAÇÃO
-from variáveis import B_FRICTION, B_MASSA, B_ANIMATION_SPEED
+from variáveis import B_FRICTION, B_MASSA, B_ANIMFLY_SPEED
 from variáveis import B_MAXV_SPEED, B_MAXH_SPEED
 # & \Imports Bird/ & #
 
@@ -37,7 +37,7 @@ class Bird(Sprite):
 
         main_path_cor = 'verde', 'vermelho', 'azul'
         main_path: str = path.join(
-            diretorio, f'texturas/Animation_bird/{main_path_cor[0]}/Passaro_{main_path_cor[0]}')
+            diretorio, f'texturas/animation_bird/{main_path_cor[0]}/Passaro_{main_path_cor[0]}')
 
         # Conjunto de texturas/Carregando texturas
         self.voando_texturas = self.load_text("voando", main_path, 8)
@@ -51,20 +51,21 @@ class Bird(Sprite):
         self.index_texture: int = 0
         self.y_odometer: int = 0
         self.rotação: int = 0
-        self.frames_texture: int = 7
+        self.frames_texture: int = 2
 
         self.jump_init = 0
+
+    def update(self):
+        if self.game_mode == 'Tela_Inicial':
+            self.set_animation_sprites(
+                self.frames_texture, 0.03, self.parado_texturas)
 
     def pymunk_moved(self, physics_engine, dx, dy, d_angle):
         """ Handle being moved by the pymunk engine """
         is_on_ground = physics_engine.is_on_ground(self)
         self.y_odometer += dy
 
-        if self.game_mode == 'Tela_Inicial':
-            if not is_on_ground and dy > 0.1 and abs(self.y_odometer) > 5:
-                self.set_animation_sprites(
-                    self.frames_texture, B_ANIMATION_SPEED, self.parado_texturas)
-        elif self.game_mode == 'Gameplay':
+        if self.game_mode == 'Gameplay':
             if self.jump_init < 1:
                 impulse = (0, B_JUMP_IMPULSE)
                 physics_engine.apply_impulse(self, impulse)
@@ -73,7 +74,7 @@ class Bird(Sprite):
             # Animação de voar
             if not is_on_ground and dy > 0.1 and abs(self.y_odometer) > 5:
                 self.set_animation_sprites(
-                    self.frames_texture, B_ANIMATION_SPEED, self.voando_texturas)
+                    self.frames_texture, B_ANIMFLY_SPEED, self.voando_texturas)
                 self.rotação -= B_SET_ANGULO
             else: self.rotação += B_SET_ANGULO-1
 

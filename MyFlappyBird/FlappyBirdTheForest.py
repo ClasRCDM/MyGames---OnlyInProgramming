@@ -11,7 +11,8 @@ from variáveis import W_LARGURA, W_ALTURA, W_TÍTULOS
 from variáveis import DEFAULT_DAMPING, W_GRAVIDADE
 # ------ Window modules ------ #
 from módulos.Pássaro import Bird
-from módulos.FundoFrente import BackgroundForeground
+from módulos.FundoFrente import Tiled_world
+from módulos.GUI import GUI_world
 # & \Imports World/ & #
 
 
@@ -50,8 +51,8 @@ class Jogo(arcade.Window):
         self.pássaro_lista: Optional[arcade.SpriteList] = None
         self.pássaro_pulo: bool = True
 
-        # Background
-        self.backfore = None
+        # Tiled/GUI
+        self.backfore = self.GUI = None
 
         # Physics engine
         self.physics_engine: Optional[arcade.PymunkPhysicsEngine] = None
@@ -59,13 +60,17 @@ class Jogo(arcade.Window):
     def setup(self):
         """ Inicia o jogo. E caso seja chamado o reinicia. """
 
-        # Backgrounds
-        self.backfore = BackgroundForeground()
+        # Tile
+        self.backfore = Tiled_world()
         self.backfore.set_tiles(self.diretorio)
+
+        # GUi
+        self.GUI = GUI_world()
+        self.GUI.set_gui(self.diretorio)
 
         # Grupo/Sprite do pássaro/Bird
         self.pássaro_lista = arcade.SpriteList()
-        self.pássaro = Bird((3.5, 6), self.diretorio, self.Modo_jogo)
+        self.pássaro = Bird((3.5, 6.1), self.diretorio, self.Modo_jogo)
 
         # --- Pymunk Physics Engine Setup --- #
         damping = DEFAULT_DAMPING
@@ -74,10 +79,13 @@ class Jogo(arcade.Window):
         self.physics_world = arcade.PymunkPhysicsEngine(damping=damping, gravity=gravity)
         self.physics_leave = arcade.PymunkPhysicsEngine(damping=damping, gravity=(0, -100))
 
-        # - Add sprites backgrounds_
+        # == Add Sprites
+        # - Backgrounds_
         self.backfore.append_tiles(self.diretorio, self.physics_leave)
-        # -- Add sprite bird_
+        # -- Bird_
         self.pássaro_lista.append(self.pássaro)
+        # --- GUI_
+        self.GUI.append_tiles()
 
         # %__ Physics __$ #
         self.pássaro.set_física(self.physics_world)  # For Bird
@@ -97,10 +105,14 @@ class Jogo(arcade.Window):
         self.clear()
 
         self.backfore.draw()
+        self.GUI.draw()
+
         self.pássaro_lista.draw(pixelated=True)
 
     def on_update(self, delta_time):
         """ Movimentos e lógicas do jogo. """
+
+        self.pássaro.update()
 
         if self.Modo_jogo == 'Gameplay':
             self.physics_world.step()
@@ -117,3 +129,4 @@ class Jogo(arcade.Window):
         if chave == arcade.key.SPACE and self.Modo_jogo != 'Gameplay':
             self.Modo_jogo = 'Gameplay'
             self.pássaro._update_setmode(self.Modo_jogo)
+            self.pássaro.frames_texture = 7

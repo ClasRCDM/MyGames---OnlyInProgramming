@@ -8,7 +8,7 @@ from arcade import Sprite
 from arcade import draw_rectangle_filled, csscolor
 # ------ Game variables ------ #
 from variáveis import F_SPRITE_SIZE, F_SPRITE_TSCALING
-from variáveis import ARQUIVO_BACKGROUND, D_LEAVES_POS
+from variáveis import ARQUIVO_BACKGROUND, EL_LEAVES_POS
 # ------ Window modules ------ #
 from módulos.Objeto import Object
 from módulos.Decorações import Leave_particle
@@ -133,7 +133,7 @@ class Spawn_leaves:
         return Leave_particle(pos, self.diretorio, self.física)
 
     def generate(self):
-        poss = Iterator(D_LEAVES_POS, op=1)
+        poss = Iterator(EL_LEAVES_POS, op=1)
         leaves = [self.leave((self.x + pos[0], self.y + pos[1]))
                   for pos in poss]
 

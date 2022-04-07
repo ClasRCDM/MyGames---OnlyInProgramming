@@ -1,8 +1,8 @@
-"""Background and Foreground class file"""
+"""TiledWorld class file"""
 
-# & /Imports Background Foreground\ & #
+# & /Imports TiledWorld\ & #
 # ------ General defs ------ #
-import arcade
+from arcade import PymunkPhysicsEngine
 from arcade import SpriteList
 # ------ Game variables ------ #
 from variáveis import PF_MAX_HORIZONTAL, PF_PONTO_DE_VOLTA
@@ -12,31 +12,28 @@ from módulos.Obstáculos import Obstacles
 from módulos.Parallax import Parallax, Water
 from módulos.Parallax import Spawn_leaves, Iterator
 from módulos.Decorações import Big_rock
-# & \Imports Background Foreground/ & #
+# & \Imports TiledWorld/ & #
 
 
-class BackgroundForeground:
+class Tiled_world:
     """ Background and Foreground Sprites """
 
     def __init__(self):
-        """ Init BackgroundForeground """
+        """ Init TiledWorld """
 
         # Sprites
         self.tile = {}
 
-        # Group sprites/Forest, Forest reflection
+        # -- Group sprites
+        # Forest, Forest reflection
         self.tile_floresta, self.tile_reflexo = SpriteList(), SpriteList()
         self.tile_reflexo.alpha_normalized = 0.8
 
-        # Group sprite Obstacles
+        # Obstacles
         self.tile_obstacles, self.tile_objects = SpriteList(), SpriteList()
 
-        # Group sprite Effects/GUI
-        self.tile_effects, self.tile_GUI = SpriteList(), SpriteList()
-
-    def set_move(self, layer, vel):
-        """ Move parallax sprite """
-        self.tile[layer].update(self.tile[layer].layer, vel)
+        # Effects
+        self.tile_effects = SpriteList()
 
     def set_tiles(self, diretorio):
         """ Create all tiles """
@@ -58,7 +55,7 @@ class BackgroundForeground:
         self.tile['layer_8'] = Obstacles(-60, 0, diretorio, 0, 'Tronco')
         self.tile['layer_9'] = Obstacles(-190, 0, diretorio, 1, 'Tronco')
 
-        self.tile['layer_10'] = Big_rock((3.4, -1), diretorio)
+        self.tile['layer_10'] = Big_rock((3.3, -0.05), diretorio)
 
     def append_tiles(self, diretorio, física):
         """ Add all tiles """
@@ -107,7 +104,7 @@ class BackgroundForeground:
         nuns = Iterator(PF_SEQUENCIA_SSPEED, op=2)
         for index, speed in nuns:
             self.set_move(f'layer_{index+1}', speed)
-        self.set_move('layer_1_sheet', 2)
+        self.set_move('layer_1_sheet', PF_SEQUENCIA_SSPEED[0])
 
         # Water reflection movement
         self.set_move('layer_7', 2)
@@ -118,10 +115,14 @@ class BackgroundForeground:
         self.tile['layer_9'].moving(física)
 
         # moving stone
-        self.tile['layer_10'].move(2)
+        self.tile['layer_10'].move(PF_SEQUENCIA_SSPEED[0])
 
         # -- General effects
         self.spawns_leaves()
+
+    def set_move(self, layer, vel):
+        """ Move parallax sprite """
+        self.tile[layer].update(self.tile[layer].layer, vel)
 
     def spawns_leaves(self):
         """ Leaf spawn with physics  """
@@ -162,7 +163,7 @@ class BackgroundForeground:
         física.add_sprite_list(self.tile_obstacles,
                                friction=0.6,
                                collision_type="wall",
-                               body_type=arcade.PymunkPhysicsEngine.DYNAMIC)
+                               body_type=PymunkPhysicsEngine.DYNAMIC)
 
     def draw(self):
         """ Draw sprites groups """

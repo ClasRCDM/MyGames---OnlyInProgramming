@@ -2,12 +2,33 @@
 
 # & /Imports GUI\ & #
 # ------ General defs ------ #
-from os import path
-from arcade import Sprite
+from arcade import SpriteList
 # ------ Game variables ------ #
-
+# ------ Window modules ------ #
+from módulos.GUI_Objects import PlayBox
 # & \Imports GUI/ & #
 
-class PlayBox(Sprite):
-    def __init__(self) -> None:
-        super().__init__()
+
+class GUI_world:
+    def __init__(self):
+        """ Init GUI """
+
+        # Sprites
+        self.GUI = {}
+
+        # -- Groups GUI
+        # Start Game
+        self.GUI_menu = SpriteList()
+
+    def set_gui(self, diretorio):
+        """ Create all GUI """
+
+        pass
+
+    def append_tiles(self):
+        """ Add GUI for screen """
+
+        pass
+
+    def draw(self):
+        self.GUI_menu.draw(pixelated=True)
