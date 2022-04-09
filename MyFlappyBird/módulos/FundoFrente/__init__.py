@@ -38,7 +38,8 @@ class Tiled_world:
     def set_tiles(self, diretorio):
         """ Create all tiles """
 
-        # -- Objects Parallax
+        # -- Objects -- #
+        # -Parallax-
         self.tile['layer_1'] = self.set_pllx(diretorio, 3.6, 6.4, 2, 'Floresta_Troncos')
         self.tile['layer_1_sheet'] = self.set_pllx(diretorio, 3.6, 6.4, 2, 'Floresta_Folhas')
         self.tile['layer_2'] = self.set_pllx(diretorio, 3.4, 6, 1, 'Floresta')
@@ -46,21 +47,24 @@ class Tiled_world:
         self.tile['layer_4'] = self.set_pllx(diretorio, 2.5, 15, 0, 'Lights')
         self.tile['layer_5'] = self.set_pllx(diretorio, 15, 16.5, 1, 'Lights')
 
-        # -- Object water/Reflection
+        # -Water/Reflection-
         self.tile['layer_6'] = Water(201, 22, 60, 402, diretorio)
         self.tile['layer_7'] = self.set_pllx(diretorio, 3.5, -0.89, 0, 'Reflexo', True)
         self.tile['layer_11'] = self.set_pllx(diretorio, 3.5, -0.89, 0, 'Effect_water', True)
 
-        # -- collision obstacles
+        # -Collision obstacles-
         self.tile['layer_8'] = Obstacles(-60, 0, diretorio, 0, 'Tronco')
         self.tile['layer_9'] = Obstacles(-190, 0, diretorio, 1, 'Tronco')
 
+        # -- GUI -- #
         self.tile['layer_10'] = Big_rock((3.3, -0.05), diretorio)
+
+        # -- Effects -- #
 
     def append_tiles(self, diretorio, física):
         """ Add all tiles """
 
-        # -- Set Parallax sprites to sprite group
+        # -- Set Parallax sprites to sprite group -- #
         nuns = Iterator(PF_SEQUENCIA_SPRITES, op=1)
         for index in nuns:
             self.return_parallax(self.tile_floresta, f'layer_{index}')
@@ -95,6 +99,7 @@ class Tiled_world:
         self.leaves = Spawn_leaves(self.tile['layer_3'].layer.x_y,
                                    diretorio, física)
 
+        # -- EFFECTS -- #
         # First leaves
         self.spawns_leaves()
 

@@ -5,7 +5,6 @@
 from arcade import SpriteList
 # ------ Game variables ------ #
 # ------ Window modules ------ #
-from módulos.GUI_Objects import PlayBox
 # & \Imports GUI/ & #
 
 

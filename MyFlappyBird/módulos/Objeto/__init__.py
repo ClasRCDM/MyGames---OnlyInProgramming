@@ -1,11 +1,22 @@
-"""Object class file"""
+"""Objects class file"""
 
 # & /Imports Objects\ & #
 # ------ General defs ------ #
 from os import path
+from numpy import arange
 from typing import Union
-from arcade import Sprite
+from arcade import Sprite, load_texture
 # & \Imports Objects/ & #
+
+
+def Iterator(val, op=0) -> int:
+    match op:
+        case 1:
+            return (index for index in val)
+        case 2:
+            return (index for index in enumerate(val))
+        case _:
+            return (index for index in arange(val))
 
 
 class Object:
@@ -22,8 +33,8 @@ class Object:
         self.DIRETORIO = diretorio
         self.ARQUIVO = arquivo
 
-        self.x = x if x is not None else 0
-        self.y = y if y is not None else 0
+        self.x: int | float = x if x is not None else 0
+        self.y: int | float = y if y is not None else 0
 
         self.x_y = self.x, self.y
 
@@ -48,3 +59,38 @@ class Object:
         """ adding scales """
 
         background.scale = sprite_scaling
+
+
+class Object_sprite(Sprite):
+    def __init__(self,
+                 x: Union[int, float] = None,
+                 y: Union[int, float] = None):
+        super().__init__()
+
+        self.x: int | float = x if x is not None else 0
+        self.y: int | float = y if y is not None else 0
+
+        self.hit_box_algorithm = self.main_path = 'None'
+
+    def sprite_loc(self, diretorio, sprite) -> str:
+        """ Set folder path to sprite """
+        return path.join(diretorio, sprite)
+
+    def _x(self, size) -> int | float:
+        """ x argument position """
+        return size * self.x + size / 2
+
+    def _y(self, size) -> int | float:
+        """ y argument position """
+        return size * self.y + size / 2
+
+    def set_pos(self, size):
+        """ Set location """
+
+        self.set_position(self._x(size), self._y(size))
+
+    def set_sprite(self, main_path):
+        """ Set first sprite """
+
+        sprite = load_texture(main_path)
+        self.texture = sprite

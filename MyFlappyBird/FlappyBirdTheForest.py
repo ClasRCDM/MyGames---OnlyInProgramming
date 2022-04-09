@@ -12,7 +12,7 @@ from variáveis import DEFAULT_DAMPING, W_GRAVIDADE
 # ------ Window modules ------ #
 from módulos.Pássaro import Bird
 from módulos.FundoFrente import Tiled_world
-from módulos.GUI import GUI_world
+from módulos.GUI.GUI_class import GUI_world
 # & \Imports World/ & #
 
 
@@ -128,5 +128,8 @@ class Jogo(arcade.Window):
 
         if chave == arcade.key.SPACE and self.Modo_jogo != 'Gameplay':
             self.Modo_jogo = 'Gameplay'
+
             self.pássaro._update_setmode(self.Modo_jogo)
             self.pássaro.frames_texture = 7
+
+            self.pássaro_lista.append(self.pássaro.dash_jump)

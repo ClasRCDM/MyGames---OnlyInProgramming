@@ -1,8 +1,7 @@
 """Parallax program file"""
 
 # & /Imports Parallax\ & #
-# ------ General defs ------ #]
-from tokenize import Number
+# ------ General defs ------ #
 from numpy import arange
 from arcade import Sprite
 from arcade import draw_rectangle_filled, csscolor
@@ -10,19 +9,9 @@ from arcade import draw_rectangle_filled, csscolor
 from variáveis import F_SPRITE_SIZE, F_SPRITE_TSCALING
 from variáveis import ARQUIVO_BACKGROUND, EL_LEAVES_POS
 # ------ Window modules ------ #
-from módulos.Objeto import Object
-from módulos.Decorações import Leave_particle
+from módulos.Objeto import Object, Iterator
+from módulos.Effect import Leave_particle
 # & \Imports Parallax/ & #
-
-
-def Iterator(val, op=0) -> Number:
-    match op:
-        case 1:
-            return (index for index in val)
-        case 2:
-            return (index for index in enumerate(val))
-        case _:
-            return (index for index in arange(val))
 
 
 class Parallax:

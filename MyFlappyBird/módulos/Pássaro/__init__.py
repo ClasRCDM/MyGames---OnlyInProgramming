@@ -12,6 +12,8 @@ from variáveis import B_SET_ANGULO, B_SPRITE_SIZE
 from variáveis import B_MAXC_ROTAÇÃO, B_MAXB_ROTAÇÃO
 from variáveis import B_FRICTION, B_MASSA, B_ANIMFLY_SPEED
 from variáveis import B_MAXV_SPEED, B_MAXH_SPEED
+# ------ Window modules ------ #
+from módulos.Effect import dash_dust_jump
 # & \Imports Bird/ & #
 
 
@@ -48,17 +50,28 @@ class Bird(Sprite):
         self.texture = self.parado_texturas[0][0]
         self.hit_box = self.texture.hit_box_points
 
+        # Variables to animation of move sprite
         self.index_texture: int = 0
         self.y_odometer: int = 0
         self.rotação: int = 0
         self.frames_texture: int = 2
 
         self.jump_init = 0
+        self.dash_jump = dash_dust_jump((3.55, 1.2), diretorio)
 
     def update(self):
+        """ Update geral """
+
         if self.game_mode == 'Tela_Inicial':
             self.set_animation_sprites(
                 self.frames_texture, 0.03, self.parado_texturas)
+            self.dash_jump.update()
+        elif self.game_mode == 'Gameplay' and self.dash_jump is not None:
+            self.dash_jump.animation()
+            self.dash_jump.center_x += 1.9
+
+            if self.dash_jump.index_texture >= 3.8:
+                self.dash_jump = None
 
     def pymunk_moved(self, physics_engine, dx, dy, d_angle):
         """ Handle being moved by the pymunk engine """
@@ -84,22 +97,29 @@ class Bird(Sprite):
             elif self.angle >= B_MAXB_ROTAÇÃO: self.rotação = B_MAXB_ROTAÇÃO
 
     def set_animation_sprites(self, q_sprite, speed_sprite, sprites):
+        """ Make the animations """
+
         self.x_odometer = 0
         self.index_texture = (self.index_texture + speed_sprite) % q_sprite
         self.texture = sprites[int(self.index_texture)][0]
 
     def set_location(self) -> int | float:
+        """ Return x and y, positions """
         return B_SPRITE_SIZE * self.x + B_SPRITE_SIZE / 2, B_SPRITE_SIZE * self.y-245 + B_SPRITE_SIZE / 2
 
     def _update_setmode(self, game_mode):
+        """ Set game_mode """
         self.game_mode: str = game_mode
 
     def pular(self, chave, física):
+        """ Jump bird """
+
         if chave == key.UP or chave == key.SPACE:
             impulse = (0, B_JUMP_IMPULSE)
             física.apply_impulse(self, impulse)
 
     def set_física(self, física):
+        """ Add physics to the bird """
         física.add_sprite(self,
                           friction=B_FRICTION,
                           mass=B_MASSA,

@@ -62,6 +62,7 @@ WA_ARQUIVO = TEXTURAS('background') + 'effect_water.png'
 # --- D --- #
 D_SPRITE_ROCK: str = TEXTURAS('decorations') + 'Pedra_grande_Placa.png'
 
+
 # % Effects % # --
 # --- E --- #
 
@@ -72,12 +73,8 @@ EL_LEAVES_POS = [(7, 11), (4, 12), (2, 13.5), (0, 11), (6.5, 13)]
 
 # $ Dust to init jump $ #
 # --- DJ = dust jump --- #
-EDJ_SPRITE = [TEXTURAS('effects') + f'dustjump/FX052_{num}.png' for num in range(5)]
+EDJ_SPRITE = [TEXTURAS('effects') + f'dustjump/FX052_{num+1}.png' for num in range(5)]
+
 
 # % GUI % # --
-
-# $ Sizes $ #
-# --- G = GUI --- #
-G_SPRITE_ISIZE: int | float = 12
-G_SPRITE_PSCALING = G_SPRITE_TSCALING = 3.0
-G_SPRITE_SIZE = int(G_SPRITE_ISIZE * G_SPRITE_PSCALING)
+# --- G --- #
