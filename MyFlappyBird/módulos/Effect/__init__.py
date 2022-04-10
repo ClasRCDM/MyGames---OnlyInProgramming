@@ -3,13 +3,12 @@
 # & /Imports decorations\ & #
 # ------ General defs ------ #
 from os import path
-from arcade import load_texture_pair, load_texture
+from arcade import load_texture
 from random import randint, uniform
 # ------ Game variables ------ #
 from variáveis import B_SPRITE_TSCALING, B_SPRITE_SIZE
-from variáveis import EL_SPRITE_LEAVES, EDJ_SPRITE, TEXTURAS
+from variáveis import EL_SPRITE_LEAVES, EDJ_SPRITE
 # ------ Window modules ------ #
-from módulos.Objeto import Iterator
 from módulos.Objeto import Object_sprite
 # & \Imports decorations/ & #
 

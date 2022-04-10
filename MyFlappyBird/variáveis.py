@@ -63,7 +63,7 @@ WA_ARQUIVO = TEXTURAS('background') + 'effect_water.png'
 D_SPRITE_ROCK: str = TEXTURAS('decorations') + 'Pedra_grande_Placa.png'
 
 
-# % Effects % # --
+# % Effects % # -----------------------------------------
 # --- E --- #
 
 # $ Leaves $ #
@@ -76,5 +76,9 @@ EL_LEAVES_POS = [(7, 11), (4, 12), (2, 13.5), (0, 11), (6.5, 13)]
 EDJ_SPRITE = [TEXTURAS('effects') + f'dustjump/FX052_{num+1}.png' for num in range(5)]
 
 
-# % GUI % # --
+# % GUI % # -------------------------------------------
 # --- G --- #
+
+# $ Defeat $ #
+# --- D --- #
+GD_SPRITE: str = TEXTURAS('decorations') + 'derrota.png'

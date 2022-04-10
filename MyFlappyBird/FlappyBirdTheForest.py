@@ -65,7 +65,7 @@ class Jogo(arcade.Window):
         self.backfore.set_tiles(self.diretorio)
 
         # GUi
-        self.GUI = GUI_world()
+        self.GUI = GUI_world(self.Modo_jogo)
         self.GUI.set_gui(self.diretorio)
 
         # Grupo/Sprite do pássaro/Bird
@@ -95,6 +95,7 @@ class Jogo(arcade.Window):
         def wall_collid(sprite, _wall_sprite, _arbiter, _space, _data):
             """ Called for Player/Wall collision """
             self.pássaro_pulo = False
+            self.Modo_jogo = 'Morte'
         # Add response physics
         self.physics_world.add_collision_handler(
             "player", "wall", post_handler=wall_collid)
@@ -113,10 +114,15 @@ class Jogo(arcade.Window):
         """ Movimentos e lógicas do jogo. """
 
         self.pássaro.update()
+        self.GUI._game_mode(self.Modo_jogo)
 
         if self.Modo_jogo == 'Gameplay':
             self.physics_world.step()
             self.backfore.update_movs(self.physics_world)
+        elif self.Modo_jogo == 'Morte':
+            self.physics_world.step()
+            self.backfore.tile['layer_8'].moving(self.physics_world, (1, 0))
+            self.backfore.tile['layer_9'].moving(self.physics_world, (1, 0))
 
         self.physics_leave.step()
         # print(arcade.get_fps())  # Get fps

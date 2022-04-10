@@ -116,8 +116,8 @@ class Tiled_world:
         self.set_move('layer_11', 2)
 
         # Wooden logs movement
-        self.tile['layer_8'].moving(física)
-        self.tile['layer_9'].moving(física)
+        self.tile['layer_8'].moving(física, (100, 0))
+        self.tile['layer_9'].moving(física, (100, 0))
 
         # moving stone
         self.tile['layer_10'].move(PF_SEQUENCIA_SSPEED[0])

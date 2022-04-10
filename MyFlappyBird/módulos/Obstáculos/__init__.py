@@ -60,10 +60,10 @@ class Obstacles(Object):
             física.set_position(
                 tronco, (x, int(O_SPRITE_SIZE * self.y+m+y + O_SPRITE_SIZE / 2)))
 
-    def moving(self, física):
+    def moving(self, física, vel):
         self.loop_movimento(física)
 
-        física.set_velocity(self.tronco_baixo, (100, 0))
-        física.set_velocity(self.tronco_cima, (100, 0))
+        física.set_velocity(self.tronco_baixo, (vel[0], vel[1]))
+        física.set_velocity(self.tronco_cima, (vel[0], vel[1]))
 
         self.tronco_baixo.angle = self.tronco_cima.angle = 0
