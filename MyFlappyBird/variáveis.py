@@ -18,8 +18,7 @@ DEFAULT_DAMPING: float = 1.0
 # ____________________#
 # /global variables\ #
 
-# $ Bird $ #
-# --- B --- #
+# $ Bird $ ## --- B --- #
 B_SPRITE_ISIZE: int | float = 13
 B_SPRITE_PSCALING = B_SPRITE_TSCALING = 3.9
 B_DAMPING: float | int = 0.4
@@ -43,8 +42,8 @@ F_SPRITE_SIZE = int(F_SPRITE_ISIZE * F_SPRITE_PSCALING)
 PF_MAX_HORIZONTAL: float | int = 1100
 PF_PONTO_DE_VOLTA: float | int = -1459
 ARQUIVO_BACKGROUND: str = TEXTURAS('background') + 'background'
-PF_SEQUENCIA_SPRITES = 3, 4, 2, 5, 1
-PF_SEQUENCIA_SSPEED = 1.8, 1, 0.3, 0.3, 1.2
+PF_SEQUENCIA_SPRITES: tuple = 3, 4, 2, 5, 1
+PF_SEQUENCIA_SSPEED: tuple = 1.8, 1, 0.3, 0.3, 1.2
 
 # $ Obstacles Foreground $ #
 # --- O = Obstacles --- #
@@ -54,31 +53,30 @@ O_SPRITE_SIZE = int(O_SPRITE_ISIZE * O_SPRITE_PSCALING)
 ARQUIVO_OBSTACLES: str = TEXTURAS('obstacles')
 O_MAX_HORIZONTAL: int | float = 600
 
-# $ Water $ #
-# --- WA --- #
-WA_ARQUIVO = TEXTURAS('background') + 'effect_water.png'
+# $ Water $ ## --- WA --- #
+WA_ARQUIVO: str = TEXTURAS('background') + 'effect_water.png'
 
-# $ Decorations $ #
-# --- D --- #
+# $ Decorations $ ## --- D --- #
 D_SPRITE_ROCK: str = TEXTURAS('decorations') + 'Pedra_grande_Placa.png'
 
 
 # % Effects % # -----------------------------------------
 # --- E --- #
 
-# $ Leaves $ #
-# --- L = leaves --- #
-EL_SPRITE_LEAVES = [TEXTURAS('effects') + f'Leaves/Leave_{num}.png' for num in range(5)]
-EL_LEAVES_POS = [(7, 11), (4, 12), (2, 13.5), (0, 11), (6.5, 13)]
+# $ Leaves $ ## --- L --- #
+EL_SPRITE_LEAVES: list = [TEXTURAS('effects') + f'Leaves/Leave_{num}.png' for num in range(5)]
+EL_LEAVES_POS: list = [(7, 11), (4, 12), (2, 13.5), (0, 11), (6.5, 13)]
 
 # $ Dust to init jump $ #
 # --- DJ = dust jump --- #
-EDJ_SPRITE = [TEXTURAS('effects') + f'dustjump/FX052_{num+1}.png' for num in range(5)]
+EDJ_SPRITE: list = [TEXTURAS('effects') + f'dustjump/FX052_{num+1}.png' for num in range(5)]
 
 
 # % GUI % # -------------------------------------------
 # --- G --- #
 
-# $ Defeat $ #
-# --- D --- #
-GD_SPRITE: str = TEXTURAS('decorations') + 'derrota.png'
+# $ Defeat $ ## --- D --- #
+GD_SPRITE: str = TEXTURAS('GUI') + 'derrota.png'
+
+# $ Menu $ ## --- M --- #
+GM_RESTART: str = TEXTURAS('GUI') + 'menu_defeat.png'

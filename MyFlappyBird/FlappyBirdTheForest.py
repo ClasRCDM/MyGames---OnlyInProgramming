@@ -3,6 +3,7 @@
 # & /Imports World\ & #
 # ------ General defs ------ #
 import arcade
+import arcade.gui
 from typing import Optional
 from os import path, getcwd
 # ------ Game variables ------ #
@@ -44,7 +45,7 @@ class Jogo(arcade.Window):
         self.center_window()
 
         # Game
-        self.Modo_jogo: str = 'Tela_Inicial'
+        self.Modo_jogo: str = 'None'
 
         # Pássaro/Bird
         self.pássaro: Optional[arcade.Sprite] = None
@@ -59,6 +60,7 @@ class Jogo(arcade.Window):
 
     def setup(self):
         """ Inicia o jogo. E caso seja chamado o reinicia. """
+        self.Modo_jogo: str = 'Tela_Inicial'
 
         # Tile
         self.backfore = Tiled_world()
@@ -67,6 +69,8 @@ class Jogo(arcade.Window):
         # GUi
         self.GUI = GUI_world(self.Modo_jogo)
         self.GUI.set_gui(self.diretorio)
+
+        self.GUI.buttons(self)
 
         # Grupo/Sprite do pássaro/Bird
         self.pássaro_lista = arcade.SpriteList()
@@ -130,9 +134,10 @@ class Jogo(arcade.Window):
     def on_key_press(self, chave, modifiers):
         """ Chama sempre que uma tecla é pressionada. """
 
-        if self.pássaro_pulo: self.pássaro.pular(chave, self.physics_world)
+        if self.pássaro_pulo and not self.Modo_jogo == 'Morte':
+            self.pássaro.pular(chave, self.physics_world)
 
-        if chave == arcade.key.SPACE and self.Modo_jogo != 'Gameplay':
+        if chave == arcade.key.SPACE and self.Modo_jogo not in 'GameplayMorte':
             self.Modo_jogo = 'Gameplay'
 
             self.pássaro._update_setmode(self.Modo_jogo)
