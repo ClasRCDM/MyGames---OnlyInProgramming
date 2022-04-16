@@ -5,10 +5,11 @@
 import arcade
 from random import randint
 # ------ Game variables ------ #
-from variáveis import O_SPRITE_SIZE, O_SPRITE_TSCALING
+from variáveis import O_SPRITE_SIZE, O_SPRITE_TSCALING, O_BOXCOLLISION
 from variáveis import ARQUIVO_OBSTACLES, O_MAX_HORIZONTAL
+from variáveis import B_SPRITE_TSCALING, B_SPRITE_SIZE
 # ------ Window modules ------ #
-from módulos.Objeto import Object
+from módulos.Objeto import Object, Object_sprite
 # & \Imports Obstacles/ & #
 
 
@@ -67,3 +68,18 @@ class Obstacles(Object):
         física.set_velocity(self.tronco_cima, (vel[0], vel[1]))
 
         self.tronco_baixo.angle = self.tronco_cima.angle = 0
+
+
+class Box_collision(Object_sprite):
+    def __init__(self, pos, diretorio):
+        super().__init__(pos[0], pos[1])
+
+        self.scale: float = B_SPRITE_TSCALING
+
+        # Add texture
+        self.set_sprite(self.sprite_loc(diretorio, O_BOXCOLLISION))
+
+        self.set_pos(B_SPRITE_SIZE)
+
+    def move(self, x, y):
+        self.set_position(x, y)

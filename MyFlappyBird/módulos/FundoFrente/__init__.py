@@ -8,7 +8,7 @@ from arcade import SpriteList
 from variáveis import PF_MAX_HORIZONTAL, PF_PONTO_DE_VOLTA
 from variáveis import PF_SEQUENCIA_SPRITES, PF_SEQUENCIA_SSPEED
 # ------ Window modules ------ #
-from módulos.Obstáculos import Obstacles
+from módulos.Obstáculos import Obstacles, Box_collision
 from módulos.Parallax import Parallax, Water
 from módulos.Parallax import Spawn_leaves, Iterator
 from módulos.Decorações import Big_rock
@@ -55,6 +55,7 @@ class Tiled_world:
         # -Collision obstacles-
         self.tile['layer_8'] = Obstacles(-60, 0, diretorio, 0, 'Tronco')
         self.tile['layer_9'] = Obstacles(-190, 0, diretorio, 1, 'Tronco')
+        self.tile['layer_collision'] = Box_collision((2, 6), diretorio)
 
         # -- GUI -- #
         self.tile['layer_10'] = Big_rock((3.3, -0.05), diretorio)
@@ -103,6 +104,10 @@ class Tiled_world:
         # First leaves
         self.spawns_leaves()
 
+    def append_after_jump(self):
+        # -- Set collision for Obstacles sprites
+        self.tile_objects.append(self.tile['layer_collision'])
+
     def update_movs(self, física):
         """ Moving the sprites  """
 
@@ -118,6 +123,15 @@ class Tiled_world:
         # Wooden logs movement
         self.tile['layer_8'].moving(física, (100, 0))
         self.tile['layer_9'].moving(física, (100, 0))
+
+        if self.tile['layer_8'].tronco_baixo.center_x < 280:
+            self.tile['layer_collision'].move(
+                self.tile['layer_8'].tronco_baixo.center_x,
+                self.tile['layer_8'].tronco_baixo.center_y+320)
+        elif self.tile['layer_9'].tronco_baixo.center_x < 310:
+            self.tile['layer_collision'].move(
+                self.tile['layer_9'].tronco_baixo.center_x,
+                self.tile['layer_9'].tronco_baixo.center_y+320)
 
         # moving stone
         self.tile['layer_10'].move(PF_SEQUENCIA_SSPEED[0])

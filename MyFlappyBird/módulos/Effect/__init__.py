@@ -3,7 +3,6 @@
 # & /Imports decorations\ & #
 # ------ General defs ------ #
 from os import path
-from arcade import load_texture
 from random import randint, uniform
 # ------ Game variables ------ #
 from variáveis import B_SPRITE_TSCALING, B_SPRITE_SIZE
@@ -70,14 +69,8 @@ class Leave_particle(Object_sprite):
 
 
 class dash_dust_jump(Object_sprite):
-
-    @classmethod
-    def load_texts(cls, main_path: str, amount: int):
-        return [load_texture(
-            f"{main_path}_{texture}.png") for texture in range(amount)]
-
     def __init__(self, pos, diretorio):
-        """ Setup Rock """
+        """ init dash animation """
         super().__init__(pos[0], pos[1])
 
         self.scale: float = B_SPRITE_TSCALING-2.1

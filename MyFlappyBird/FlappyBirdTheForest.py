@@ -3,7 +3,6 @@
 # & /Imports World\ & #
 # ------ General defs ------ #
 import arcade
-import arcade.gui
 from typing import Optional
 from os import path, getcwd
 # ------ Game variables ------ #
@@ -45,12 +44,14 @@ class Jogo(arcade.Window):
         self.center_window()
 
         # Game
-        self.Modo_jogo: str = 'None'
+        self.Modo_jogo: str
+        self.Score: list[int, int]
+        self.Score_add: bool
 
         # Pássaro/Bird
         self.pássaro: Optional[arcade.Sprite] = None
         self.pássaro_lista: Optional[arcade.SpriteList] = None
-        self.pássaro_pulo: bool = True
+        self.pássaro_pulo: bool
 
         # Tiled/GUI
         self.backfore = self.GUI = None
@@ -61,16 +62,17 @@ class Jogo(arcade.Window):
     def setup(self):
         """ Inicia o jogo. E caso seja chamado o reinicia. """
         self.Modo_jogo: str = 'Tela_Inicial'
+        self.pássaro_pulo: bool = True
+        self.Score: list = [0, 0]
+        self.Score_add: bool = True
 
         # Tile
         self.backfore = Tiled_world()
         self.backfore.set_tiles(self.diretorio)
 
-        # GUi
+        # GUI
         self.GUI = GUI_world(self.Modo_jogo)
-        self.GUI.set_gui(self.diretorio)
-
-        self.GUI.buttons(self)
+        self.GUI.set_gui(self.diretorio, self)
 
         # Grupo/Sprite do pássaro/Bird
         self.pássaro_lista = arcade.SpriteList()
@@ -80,8 +82,10 @@ class Jogo(arcade.Window):
         damping = DEFAULT_DAMPING
         gravity = (0, -W_GRAVIDADE)
 
-        self.physics_world = arcade.PymunkPhysicsEngine(damping=damping, gravity=gravity)
-        self.physics_leave = arcade.PymunkPhysicsEngine(damping=damping, gravity=(0, -100))
+        self.physics_world = arcade.PymunkPhysicsEngine(
+            damping=damping, gravity=gravity)
+        self.physics_leave = arcade.PymunkPhysicsEngine(
+            damping=damping, gravity=(0, -100))
 
         # == Add Sprites
         # - Backgrounds_
@@ -98,8 +102,9 @@ class Jogo(arcade.Window):
         # %__ Physics/Collision response to obstacle __$ #
         def wall_collid(sprite, _wall_sprite, _arbiter, _space, _data):
             """ Called for Player/Wall collision """
-            self.pássaro_pulo = False
-            self.Modo_jogo = 'Morte'
+            if self.pássaro_pulo and self.Modo_jogo != 'Morte':
+                self.pássaro_pulo = False
+                self.Modo_jogo = 'Morte'
         # Add response physics
         self.physics_world.add_collision_handler(
             "player", "wall", post_handler=wall_collid)
@@ -123,6 +128,24 @@ class Jogo(arcade.Window):
         if self.Modo_jogo == 'Gameplay':
             self.physics_world.step()
             self.backfore.update_movs(self.physics_world)
+
+            if self.backfore.tile['layer_collision'].center_x \
+                >= self.pássaro.center_x and self.Score_add:
+                self.Score[0] += 1
+
+                if self.Score[0] > 9:
+                    self.Score[1] += 1
+                    self.GUI.GUI['PT_at2'].set_sprite_number(
+                        self.diretorio, self.Score[1])
+                    self.Score[0] = 0
+
+                self.GUI.GUI['PT'].set_sprite_number(
+                    self.diretorio, self.Score[0])
+
+                self.Score_add = False
+            elif self.backfore.tile['layer_collision'].center_x <= self.pássaro.center_x:
+                self.Score_add = True
+
         elif self.Modo_jogo == 'Morte':
             self.physics_world.step()
             self.backfore.tile['layer_8'].moving(self.physics_world, (1, 0))
@@ -143,4 +166,5 @@ class Jogo(arcade.Window):
             self.pássaro._update_setmode(self.Modo_jogo)
             self.pássaro.frames_texture = 7
 
+            self.backfore.append_after_jump()
             self.pássaro_lista.append(self.pássaro.dash_jump)

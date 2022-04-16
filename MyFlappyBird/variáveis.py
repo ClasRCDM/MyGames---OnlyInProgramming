@@ -52,6 +52,7 @@ O_SPRITE_PSCALING = O_SPRITE_TSCALING = 3.5
 O_SPRITE_SIZE = int(O_SPRITE_ISIZE * O_SPRITE_PSCALING)
 ARQUIVO_OBSTACLES: str = TEXTURAS('obstacles')
 O_MAX_HORIZONTAL: int | float = 600
+O_BOXCOLLISION: str = TEXTURAS('obstacles') + 'colisão_passar_tronco.png'
 
 # $ Water $ ## --- WA --- #
 WA_ARQUIVO: str = TEXTURAS('background') + 'effect_water.png'
@@ -80,3 +81,7 @@ GD_SPRITE: str = TEXTURAS('GUI') + 'derrota.png'
 
 # $ Menu $ ## --- M --- #
 GM_RESTART: str = TEXTURAS('GUI') + 'menu_defeat.png'
+
+# $ Placar $ ## --- P --- #
+GP_SCOREBOARD: str = TEXTURAS('GUI') + 'placar.png'
+GP_SCORE: list = [TEXTURAS('GUI') + f'números/pf_{num}.png' for num in range(10)]

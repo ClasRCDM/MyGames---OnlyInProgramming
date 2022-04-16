@@ -62,6 +62,12 @@ class Object:
 
 
 class Object_sprite(Sprite):
+
+    @classmethod
+    def load_texts(cls, main_path: str, amount: int):
+        return [load_texture(
+            f"{main_path}_{texture}.png") for texture in range(amount)]
+
     def __init__(self,
                  x: Union[int, float] = None,
                  y: Union[int, float] = None):
