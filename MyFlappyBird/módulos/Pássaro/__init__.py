@@ -59,6 +59,7 @@ class Bird(Sprite):
         self.jump_init = 0
         self.dash_jump = dash_dust_jump((3.55, 1.2), diretorio)
 
+    # Bird __ Settings
     def update(self):
         """ Update geral """
 
@@ -107,10 +108,6 @@ class Bird(Sprite):
         """ Return x and y, positions """
         return B_SPRITE_SIZE * self.x + B_SPRITE_SIZE / 2, B_SPRITE_SIZE * self.y-245 + B_SPRITE_SIZE / 2
 
-    def _update_setmode(self, game_mode):
-        """ Set game_mode """
-        self.game_mode: str = game_mode
-
     def pular(self, chave, física):
         """ Jump bird """
 
@@ -127,3 +124,14 @@ class Bird(Sprite):
                           max_vertical_velocity=B_MAXV_SPEED,
                           max_horizontal_velocity=B_MAXH_SPEED,
                           collision_type="player")
+
+    # Bird __ property's
+    @property
+    def game_mode(self):
+        return self._game_mode
+
+    @game_mode.setter
+    def game_mode(self, game_mode):
+        if isinstance(game_mode, str):
+            self._game_mode = game_mode
+        else: self._game_mode = 'Tela_Inicial'

@@ -46,7 +46,7 @@ class Jogo(arcade.Window):
         # Game
         self.Modo_jogo: str
         self.Score: list[int, int]
-        self.Score_add: bool
+        self.Score_can: bool
 
         # Pássaro/Bird
         self.pássaro: Optional[arcade.Sprite] = None
@@ -59,20 +59,19 @@ class Jogo(arcade.Window):
         # Physics engine
         self.physics_engine: Optional[arcade.PymunkPhysicsEngine] = None
 
+    # World __ Settings
     def setup(self):
         """ Inicia o jogo. E caso seja chamado o reinicia. """
         self.Modo_jogo: str = 'Tela_Inicial'
         self.pássaro_pulo: bool = True
         self.Score: list = [0, 0]
-        self.Score_add: bool = True
+        self.Score_can: bool = True
 
         # Tile
-        self.backfore = Tiled_world()
-        self.backfore.set_tiles(self.diretorio)
+        self.backfore = Tiled_world(self.diretorio)
 
         # GUI
-        self.GUI = GUI_world(self.Modo_jogo)
-        self.GUI.set_gui(self.diretorio, self)
+        self.GUI = GUI_world(self.Modo_jogo, self.diretorio, self)
 
         # Grupo/Sprite do pássaro/Bird
         self.pássaro_lista = arcade.SpriteList()
@@ -123,33 +122,22 @@ class Jogo(arcade.Window):
         """ Movimentos e lógicas do jogo. """
 
         self.pássaro.update()
-        self.GUI._game_mode(self.Modo_jogo)
+        self.GUI.game_mode = self.Modo_jogo
 
         if self.Modo_jogo == 'Gameplay':
             self.physics_world.step()
             self.backfore.update_movs(self.physics_world)
 
-            if self.backfore.tile['layer_collision'].center_x \
-                >= self.pássaro.center_x and self.Score_add:
-                self.Score[0] += 1
-
-                if self.Score[0] > 9:
-                    self.Score[1] += 1
-                    self.GUI.GUI['PT_at2'].set_sprite_number(
-                        self.diretorio, self.Score[1])
-                    self.Score[0] = 0
-
-                self.GUI.GUI['PT'].set_sprite_number(
-                    self.diretorio, self.Score[0])
-
-                self.Score_add = False
-            elif self.backfore.tile['layer_collision'].center_x <= self.pássaro.center_x:
-                self.Score_add = True
+            self.Score_can = \
+                self.GUI.add_score(self.backfore.tile['Obstacles']['layer_collision'],
+                                   self.pássaro, self.diretorio,
+                                   self.Score, self.Score_can)
 
         elif self.Modo_jogo == 'Morte':
             self.physics_world.step()
-            self.backfore.tile['layer_8'].moving(self.physics_world, (1, 0))
-            self.backfore.tile['layer_9'].moving(self.physics_world, (1, 0))
+
+            self.backfore.tile['Obstacles']['layer_8'].moving(self.physics_world, (1, 0))
+            self.backfore.tile['Obstacles']['layer_9'].moving(self.physics_world, (1, 0))
 
         self.physics_leave.step()
         # print(arcade.get_fps())  # Get fps
@@ -163,8 +151,19 @@ class Jogo(arcade.Window):
         if chave == arcade.key.SPACE and self.Modo_jogo not in 'GameplayMorte':
             self.Modo_jogo = 'Gameplay'
 
-            self.pássaro._update_setmode(self.Modo_jogo)
+            self.pássaro.game_mode = self.Modo_jogo
             self.pássaro.frames_texture = 7
 
             self.backfore.append_after_jump()
             self.pássaro_lista.append(self.pássaro.dash_jump)
+
+    # World __ property's
+    @property
+    def Modo_jogo(self):
+        return self._Modo_jogo
+
+    @Modo_jogo.setter
+    def Modo_jogo(self, game_mode):
+        if isinstance(game_mode, str):
+            self._Modo_jogo = game_mode
+        else: self._Modo_jogo = 'Tela_Inicial'

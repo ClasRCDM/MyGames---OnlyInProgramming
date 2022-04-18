@@ -2,8 +2,8 @@
 
 # & /Imports Obstacles\ & #
 # ------ General defs ------ #
-import arcade
 from random import randint
+from arcade import Sprite
 # ------ Game variables ------ #
 from variáveis import O_SPRITE_SIZE, O_SPRITE_TSCALING, O_BOXCOLLISION
 from variáveis import ARQUIVO_OBSTACLES, O_MAX_HORIZONTAL
@@ -24,10 +24,10 @@ class Obstacles(Object):
         self.image, self.index = image, index
 
         # Conjunto de texturas/Carregando texturas
-        self.tronco_baixo = arcade.Sprite(
+        self.tronco_baixo = Sprite(
             f"{self.main_path}{self.image}_{self.index}.png",
             hit_box_algorithm='Simple')
-        self.tronco_cima = arcade.Sprite(
+        self.tronco_cima = Sprite(
             f"{self.main_path}{self.image}_{self.index}.png",
             hit_box_algorithm='Simple', flipped_vertically=True)
 

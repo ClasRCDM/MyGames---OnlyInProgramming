@@ -121,7 +121,7 @@ class Spawn_leaves:
     def leave(self, pos) -> Leave_particle:
         return Leave_particle(pos, self.diretorio, self.física)
 
-    def generate(self):
+    def generate(self) -> list:
         poss = Iterator(EL_LEAVES_POS, op=1)
         leaves = [self.leave((self.x + pos[0], self.y + pos[1]))
                   for pos in poss]

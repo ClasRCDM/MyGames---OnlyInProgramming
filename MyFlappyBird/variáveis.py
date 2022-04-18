@@ -85,3 +85,4 @@ GM_RESTART: str = TEXTURAS('GUI') + 'menu_defeat.png'
 # $ Placar $ ## --- P --- #
 GP_SCOREBOARD: str = TEXTURAS('GUI') + 'placar.png'
 GP_SCORE: list = [TEXTURAS('GUI') + f'números/pf_{num}.png' for num in range(10)]
+GP_SCOREBOARD_lose: str = TEXTURAS('GUI') + 'menu_scoreboard.png'
