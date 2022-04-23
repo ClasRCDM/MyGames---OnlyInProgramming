@@ -1,7 +1,6 @@
 """Class to objects for GUI"""
 
 # & /Imports objects for GUI\ & #
-# ------ General defs ------ #
 # ------ Game variables ------ #
 from variáveis import GD_SPRITE, GM_RESTART, GP_SCORE
 from variáveis import GP_SCOREBOARD_lose, GP_SCOREBOARD

@@ -45,6 +45,8 @@ class Jogo(arcade.Window):
 
         # Game
         self.Modo_jogo: str
+
+        # Scoreboard
         self.Score: list[int, int]
         self.Score_can: bool
 
@@ -64,7 +66,9 @@ class Jogo(arcade.Window):
         """ Inicia o jogo. E caso seja chamado o reinicia. """
         self.Modo_jogo: str = 'Tela_Inicial'
         self.pássaro_pulo: bool = True
-        self.Score: list = [0, 0]
+
+        # Points score
+        self.Score_points: list = [0, 0]
         self.Score_can: bool = True
 
         # Tile
@@ -124,6 +128,11 @@ class Jogo(arcade.Window):
         self.pássaro.update()
         self.GUI.game_mode = self.Modo_jogo
 
+        if self.pássaro.check_windowpos():
+            self.Modo_jogo = 'Morte'
+        if self.pássaro.check_windowpos(est=2):
+            self.pássaro.kill()
+
         if self.Modo_jogo == 'Gameplay':
             self.physics_world.step()
             self.backfore.update_movs(self.physics_world)
@@ -131,7 +140,7 @@ class Jogo(arcade.Window):
             self.Score_can = \
                 self.GUI.add_score(self.backfore.tile['Obstacles']['layer_collision'],
                                    self.pássaro, self.diretorio,
-                                   self.Score, self.Score_can)
+                                   self.Score_points, self.Score_can)
 
         elif self.Modo_jogo == 'Morte':
             self.physics_world.step()

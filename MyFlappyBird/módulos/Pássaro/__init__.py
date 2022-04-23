@@ -11,7 +11,7 @@ from variáveis import B_SPRITE_TSCALING, B_JUMP_IMPULSE
 from variáveis import B_SET_ANGULO, B_SPRITE_SIZE
 from variáveis import B_MAXC_ROTAÇÃO, B_MAXB_ROTAÇÃO
 from variáveis import B_FRICTION, B_MASSA, B_ANIMFLY_SPEED
-from variáveis import B_MAXV_SPEED, B_MAXH_SPEED
+from variáveis import B_MAXV_SPEED, B_MAXH_SPEED, TELA_CHEIA
 # ------ Window modules ------ #
 from módulos.Effect import dash_dust_jump
 # & \Imports Bird/ & #
@@ -96,6 +96,21 @@ class Bird(Sprite):
             # Não deixa ultrapassar do angulo máximo
             if self.angle <= B_MAXC_ROTAÇÃO: self.rotação = B_MAXC_ROTAÇÃO
             elif self.angle >= B_MAXB_ROTAÇÃO: self.rotação = B_MAXB_ROTAÇÃO
+
+    def check_windowpos(self, est=1) -> bool:
+        """ Check if the player is inside the screen """
+        if est == 1:
+            if self.center_y >= TELA_CHEIA[0] or self.center_y <= 0:
+                return True
+            elif self.center_x >= TELA_CHEIA[1] or self.center_y <= 0:
+                return True
+        elif est == 2:
+            if self.center_y <= 0:
+                return True
+            elif self.center_x >= TELA_CHEIA[1] or self.center_y <= 0:
+                return True
+
+        return False
 
     def set_animation_sprites(self, q_sprite, speed_sprite, sprites):
         """ Make the animations """

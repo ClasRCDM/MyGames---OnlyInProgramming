@@ -3,6 +3,7 @@
 # & /Imports GUI\ & #
 # ------ General defs ------ #
 from arcade import SpriteList, Sprite
+from arcade import draw_text, color
 from arcade import exit as arcade_exit
 from arcade.gui import UIFlatButton, UIManager
 from arcade.gui import UIBoxLayout, UIAnchorWidget
@@ -21,6 +22,7 @@ class GUI_world:
         self.GUI_manager.enable()
 
         self.game_mode = game_mode
+        self.Score_endpoints = 0
 
         # -- Groups GUI
         # Start Game
@@ -113,8 +115,9 @@ class GUI_world:
                   current_score: bool) -> bool:
         """ Sets and adds the points on the scoreboard """
 
-        if collision.center_x >= bird.center_x and current_score:
+        if collision.center_x >= bird.center_x <= collision.center_x and current_score:
             add_score[0] += 1
+            self.Score_endpoints += 1
 
             if add_score[0] > 9:
                 add_score[1] += 1
@@ -130,22 +133,42 @@ class GUI_world:
         return True if collision.center_x <= bird.center_x else False
 
     def draw(self):
+        def draw_points(x, y):
+            draw_text(f"{self.Score_endpoints}",
+                      x, y,
+                      color.BROWN_NOSE, 10.5,
+                      font_name="Kenney Blocks")
+
         """ Draw GUI """
         self.GUI_menu.draw(pixelated=True)
 
         if self.game_mode == 'Morte':
             self.GUI_manager.draw()
             self.GUI_defeat.draw(pixelated=True)
+
+            if self.Score_endpoints <= 9:
+                draw_points(372, 482)
+            elif self.Score_endpoints <= 99:
+                draw_points(367, 482)
+            elif self.Score_endpoints <= 999:
+                draw_points(361.5, 482)
+
         elif self.game_mode in 'GameplayTela_Inicial':
             self.GUI_closets.draw(pixelated=True)
 
     # GUI __ property's
     @property
-    def game_mode(self):
-        return self._game_mode
+    def Score_endpoints(self):
+        return self._Score_endpoints
 
-    @game_mode.setter
-    def game_mode(self, game_mode):
-        if isinstance(game_mode, str):
-            self._game_mode = game_mode
-        else: self._game_mode = 'Tela_Inicial'
+    @Score_endpoints.setter
+    def Score_endpoints(self, endpoints):
+        if isinstance(endpoints, int):
+            if endpoints < 0:
+                self._Score_endpoints = abs(endpoints)
+            else: self._Score_endpoints = endpoints
+        elif isinstance(endpoints, str):
+            if endpoints.isnumeric():
+                self._Score_endpoints = int(endpoints)
+            elif len(endpoints) == 3:
+                self._Score_endpoints = int(endpoints[1:])

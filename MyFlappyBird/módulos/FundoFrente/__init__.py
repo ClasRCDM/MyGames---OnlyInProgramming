@@ -3,7 +3,7 @@
 # & /Imports TiledWorld\ & #
 # ------ General defs ------ #
 from arcade import PymunkPhysicsEngine
-from arcade import SpriteList, Sprite
+from arcade import SpriteList
 # ------ Game variables ------ #
 from variáveis import PF_MAX_HORIZONTAL, PF_PONTO_DE_VOLTA
 from variáveis import PF_SEQUENCIA_SPRITES, PF_SEQUENCIA_SSPEED
@@ -32,8 +32,8 @@ class Tiled_world:
         # Obstacles
         self.tile_obstacles, self.tile_objects = SpriteList(), SpriteList()
 
-        # Effects
-        self.tile_effects = SpriteList()
+        # Effects, Collisions
+        self.tile_effects, self.tile_collision = SpriteList(), SpriteList()
 
     def set_tiles(self, diretorio) -> dict:
         """ Create all tiles """
@@ -127,7 +127,7 @@ class Tiled_world:
     def append_after_jump(self):
         """ Add collision point """
         # -- Set collision for Obstacles sprites
-        self.tile_objects.append(self.tile['Obstacles']['layer_collision'])
+        self.tile_collision.append(self.tile['Obstacles']['layer_collision'])
 
     def update_movs(self, física):
         """ Moving the sprites  """
@@ -207,6 +207,8 @@ class Tiled_world:
 
     def draw(self):
         """ Draw sprites groups """
+        self.tile_collision.draw(pixelated=True)
+
         self.tile_floresta.draw(pixelated=True)
         self.tile['Water']['layer_6'].draw()
 
